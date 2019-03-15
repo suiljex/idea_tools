@@ -1,0 +1,11 @@
+#include <iostream>
+
+#include "idea.hpp"
+
+int main(int argc, char **argv)
+{
+  std::bitset<128> temp(std::string("10111011101010100101001101000111100100110000111100101111010110011011100101011011000011011101110011000100000100101111110010011110"));
+  GenerateRoundKeys(temp);
+  
+  return 0;
+}
