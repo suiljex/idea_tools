@@ -1,11 +1,22 @@
-#include <iostream>
+#include <stdint.h>
+#include <errno.h>
+#include <string.h>
 
 #include "idea.hpp"
 
 int main(int argc, char **argv)
 {
-  std::bitset<128> temp(std::string("10111011101010100101001101000111100100110000111100101111010110011011100101011011000011011101110011000100000100101111110010011110"));
-  GenerateRoundKeys(temp);
+  uint8_t key_idea128bit[16] = {0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11};
+  uint8_t block_plain[8] = "suiljex";
+  uint8_t block_cipher[8];
+  uint8_t block_ret[8];
+
+  IdeaContext idea_ctx;
+
+  IdeaInit(&idea_ctx, key_idea128bit, 16);
+
+  IdeaEncryptBlock(&idea_ctx, block_plain, block_cipher);
+  IdeaDecryptBlock(&idea_ctx, block_cipher, block_ret);
   
   return 0;
 }

@@ -1,23 +1,23 @@
 #ifndef IDEA_HPP
 #define IDEA_HPP 1
 
-#include <string>
-#include <vector>
-#include <bitset>
+#include <stddef.h>
+#include <errno.h>
+#include <stdint.h>
 
 #include "defines.hpp"
+#include "crypto.hpp"
 
-int RotateBits(std::bitset<KEY_LEN>& d_key, int i_number);
-
-int CopyBits(std::bitset<KEY_ROUND_LEN>& o_key, std::bitset<KEY_LEN>& i_key, int i_byte_pair_number);
-
-int GenerateRoundKeys(std::bitset<KEY_LEN> i_key);
-
-int RoundEncrypt(std::bitset<BLOCK_LEN>& d_data
-                 , std::vector<std::bitset<KEY_ROUND_LEN>> i_round_keys)
+typedef struct
 {
+   uint16_t keys_encryption[52];
+   uint16_t keys_decryption[52];
+} IdeaContext;
 
-  return 0;
-}
+error_t IdeaInit(IdeaContext *context, const uint8_t *key, size_t keyLen);
+
+void IdeaEncryptBlock(IdeaContext *context, const uint8_t *input, uint8_t *output);
+
+void IdeaDecryptBlock(IdeaContext *context, const uint8_t *input, uint8_t *output);
 
 #endif //IDEA_HPP
