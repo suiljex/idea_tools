@@ -2,7 +2,6 @@
 #define IDEA_HPP 1
 
 #include <stddef.h>
-#include <errno.h>
 #include <stdint.h>
 
 #include "defines.hpp"
@@ -14,7 +13,7 @@ typedef struct
    uint16_t keys_decryption[52];
 } IdeaContext;
 
-error_t IdeaInit(IdeaContext *context, const uint8_t *key, size_t keyLen);
+unsigned int IdeaInit(IdeaContext *context, const uint8_t *key, size_t keyLen);
 
 void IdeaEncryptBlock(IdeaContext *context, const uint8_t *input, uint8_t *output);
 

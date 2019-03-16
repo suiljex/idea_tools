@@ -51,7 +51,7 @@ static uint16_t IdeaInv(uint16_t a)
   return u;
 }
 
-error_t IdeaInit(IdeaContext *context, const uint8_t *key, size_t keyLen)
+unsigned int IdeaInit(IdeaContext *context, const uint8_t *key, size_t keyLen)
 {
   uint32_t i;
   uint16_t *ek;
