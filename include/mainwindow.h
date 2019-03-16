@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include <fstream>
+
 #include "idea.hpp"
 
 namespace Ui {
@@ -41,6 +43,10 @@ private slots:
   void on_pushButton_file_decrypt_clicked();
 
   void on_pushButton_files_change_clicked();
+
+  void ProcessText(QByteArray& i_data, QByteArray& o_data, bool i_encrypt);
+
+  void ProcessFile(std::ifstream &i_fin, std::ofstream &i_fout, bool i_encrypt);
 
 private:
   Ui::MainWindow *ui;
