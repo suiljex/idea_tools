@@ -2,9 +2,11 @@
 #include "ui_mainwindow.h"
 #include <QRegExp>
 #include <QRegExpValidator>
+#include <QFileDialog>
 
 #include <random>
 #include <chrono>
+#include <fstream>
 
 #define STATUS_BAR_TIMEOUT 1800
 
@@ -177,4 +179,150 @@ void MainWindow::on_pushButton_text_decrypt_clicked()
 
   ui->plainTextEdit_decrypted->setPlainText(QString::fromUtf8(output_data));
   ui->statusBar->showMessage("Успешно расшифровано", STATUS_BAR_TIMEOUT);
+}
+
+
+void MainWindow::on_pushButton_open_file_srs_clicked()
+{
+  QString temp_filename;
+  temp_filename = QFileDialog::getOpenFileName(this, tr("Открыть исходный файл"));
+  ui->lineEdit_file_src->setText(temp_filename);
+}
+
+void MainWindow::on_pushButton_open_file_dst_clicked()
+{
+  QString temp_filename;
+  temp_filename = QFileDialog::getSaveFileName(this, tr("Открыть целевой файл"));
+  ui->lineEdit_file_dst->setText(temp_filename);
+}
+
+void MainWindow::on_pushButton_cancel_clicked()
+{
+  ui->lineEdit_file_dst->clear();
+  ui->lineEdit_file_src->clear();
+}
+
+void MainWindow::on_pushButton_file_encrypt_clicked()
+{
+  if (key_applied == false)
+  {
+    ui->statusBar->showMessage("Нет ключа", STATUS_BAR_TIMEOUT);
+    return;
+  }
+
+  std::ifstream fin;
+  std::ofstream fout;
+
+  fin.open(ui->lineEdit_file_src->text().toStdString().c_str(), std::ios_base::binary);
+  if (fin.is_open() == false)
+  {
+    ui->statusBar->showMessage("Не удалось открыть исходный файл", STATUS_BAR_TIMEOUT);
+    fin.close();
+    return;
+  }
+
+  fout.open(ui->lineEdit_file_dst->text().toStdString().c_str(), std::ios_base::binary);
+  if (fout.is_open() == false)
+  {
+    ui->statusBar->showMessage("Не удалось открыть целевой файл", STATUS_BAR_TIMEOUT);
+    fin.close();
+    fout.close();
+    return;
+  }
+
+  uint8_t data_block_in[8] = {0};
+  uint8_t data_block_out[8] = {0};
+
+  fin.seekg(0, std::ios_base::end);
+  int file_size = fin.tellg();
+  fin.seekg(0, std::ios_base::beg);
+
+  while (fin.tellg() < file_size)
+  {
+    if ((file_size - fin.tellg()) >= 8)
+    {
+      fin.read(reinterpret_cast<char*>(data_block_in), 8);
+    }
+    else if ((file_size - fin.tellg()) < 8)
+    {
+      fin.read(reinterpret_cast<char*>(data_block_in), (file_size - fin.tellg()));
+      for (unsigned int j = (file_size % 8) + 1; j < 8; ++j)
+      {
+        data_block_in[j] = 0x00;
+      }
+    }
+
+    IdeaEncryptBlock(&idea_ctx, data_block_in, data_block_out);
+    fout.write(reinterpret_cast<char*>(data_block_out), 8);
+  }
+
+  fin.close();
+  fout.close();
+  ui->statusBar->showMessage("Файл успешно зашифрован", STATUS_BAR_TIMEOUT);
+}
+
+void MainWindow::on_pushButton_file_decrypt_clicked()
+{
+  if (key_applied == false)
+  {
+    ui->statusBar->showMessage("Нет ключа", STATUS_BAR_TIMEOUT);
+    return;
+  }
+
+  std::ifstream fin;
+  std::ofstream fout;
+
+  fin.open(ui->lineEdit_file_src->text().toStdString().c_str(), std::ios_base::binary);
+  if (fin.is_open() == false)
+  {
+    ui->statusBar->showMessage("Не удалось открыть исходный файл", STATUS_BAR_TIMEOUT);
+    fin.close();
+    return;
+  }
+
+  fout.open(ui->lineEdit_file_dst->text().toStdString().c_str(), std::ios_base::binary);
+  if (fout.is_open() == false)
+  {
+    ui->statusBar->showMessage("Не удалось открыть целевой файл", STATUS_BAR_TIMEOUT);
+    fin.close();
+    fout.close();
+    return;
+  }
+
+  uint8_t data_block_in[8] = {0};
+  uint8_t data_block_out[8] = {0};
+
+  fin.seekg(0, std::ios_base::end);
+  int file_size = fin.tellg();
+  fin.seekg(0, std::ios_base::beg);
+
+  while (fin.tellg() < file_size)
+  {
+    if ((file_size - fin.tellg()) >= 8)
+    {
+      fin.read(reinterpret_cast<char*>(data_block_in), 8);
+    }
+    else if ((file_size - fin.tellg()) < 8)
+    {
+      fin.read(reinterpret_cast<char*>(data_block_in), (file_size - fin.tellg()));
+      for (unsigned int j = (file_size % 8) + 1; j < 8; ++j)
+      {
+        data_block_in[j] = 0x00;
+      }
+    }
+
+    IdeaDecryptBlock(&idea_ctx, data_block_in, data_block_out);
+    fout.write(reinterpret_cast<char*>(data_block_out), 8);
+  }
+
+  fin.close();
+  fout.close();
+  ui->statusBar->showMessage("Файл успешно расшифрован", STATUS_BAR_TIMEOUT);
+}
+
+void MainWindow::on_pushButton_files_change_clicked()
+{
+  QString temp(ui->lineEdit_file_src->text());
+  ui->lineEdit_file_src->setText(ui->lineEdit_file_dst->text());
+  ui->lineEdit_file_dst->setText(temp);
 }
