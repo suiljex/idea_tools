@@ -81,72 +81,100 @@ void MainWindow::on_pushButton_text_encrypt_clicked()
 {
   if (key_applied == false)
   {
+    ui->statusBar->showMessage("Нет ключа", STATUS_BAR_TIMEOUT);
     return;
   }
 
-  std::string plain_text(ui->plainTextEdit_decrypted->toPlainText().toStdString());
-  std::string encrypted_text;
+  QByteArray input_data(ui->plainTextEdit_decrypted->toPlainText().toUtf8());
+  QByteArray output_data;
 
-  uint8_t data_block_in[4];
-  uint8_t data_block_out[4];
+  uint8_t data_block_in[8] = {0};
+  uint8_t data_block_out[8] = {0};
 
-  for (unsigned int i = 0; i < plain_text.length(); ++i)
+  for (int i = 0; i < input_data.length(); ++i)
   {
-    data_block_in[i % 4] = plain_text[i];
+    data_block_in[i % 8] = input_data[i];
 
-    if (i % 4 == 3)
+    if (i % 8 == 7)
     {
       IdeaEncryptBlock(&idea_ctx, data_block_in, data_block_out);
-      encrypted_text += std::string(reinterpret_cast<char*>(data_block_out));
+      for (int k = 0; k < 8; ++k)
+      {
+        output_data.append(data_block_out[k]);
+      }
     }
-    else if (i == plain_text.length() - 1)
+    else if (i == input_data.length() - 1)
     {
-      for (unsigned int j = (i % 4) + 1; j < 4; ++j)
+      for (unsigned int j = (i % 8) + 1; j < 8; ++j)
       {
         data_block_in[j] = 0x00;
       }
 
       IdeaEncryptBlock(&idea_ctx, data_block_in, data_block_out);
-      encrypted_text += std::string(reinterpret_cast<char*>(data_block_out));
+      for (int k = 0; k < 8; ++k)
+      {
+        output_data.append(data_block_out[k]);
+      }
     }
   }
 
-  ui->plainTextEdit_encrypted->setPlainText(QString::fromStdString(encrypted_text));
+  ui->plainTextEdit_encrypted->setPlainText(output_data.toBase64());
+  ui->statusBar->showMessage("Успешно зашифровано", STATUS_BAR_TIMEOUT);
 }
 
 void MainWindow::on_pushButton_text_decrypt_clicked()
 {
   if (key_applied == false)
   {
+    ui->statusBar->showMessage("Нет ключа", STATUS_BAR_TIMEOUT);
     return;
   }
 
-  std::string plain_text(ui->plainTextEdit_encrypted->toPlainText().toStdString());
-  std::string decrypted_text;
+  QRegExp reg_exp_key("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$");
+  QRegExpValidator input_check(reg_exp_key, this);
+  QString temp_input_string(ui->plainTextEdit_encrypted->toPlainText());
+  int temp_pos = 0;
 
-  uint8_t data_block_in[4];
-  uint8_t data_block_out[4];
-
-  for (unsigned int i = 0; i < plain_text.length(); ++i)
+  if (input_check.validate(temp_input_string, temp_pos) != QValidator::Acceptable)
   {
-    data_block_in[i % 4] = plain_text[i];
+    ui->statusBar->showMessage("Некорректный ввод", STATUS_BAR_TIMEOUT);
+    return;
+  }
 
-    if (i % 4 == 3)
+
+  QByteArray input_data(QByteArray::fromBase64(temp_input_string.toUtf8()));
+  QByteArray output_data;
+
+  uint8_t data_block_in[8] = {0};
+  uint8_t data_block_out[8] = {0};
+
+  for (int i = 0; i < input_data.length(); ++i)
+  {
+    data_block_in[i % 8] = input_data[i];
+
+    if (i % 8 == 7)
     {
-      IdeaEncryptBlock(&idea_ctx, data_block_in, data_block_out);
-      decrypted_text += std::string(reinterpret_cast<char*>(data_block_out));
+      IdeaDecryptBlock(&idea_ctx, data_block_in, data_block_out);
+      for (int k = 0; k < 8; ++k)
+      {
+        output_data.append(data_block_out[k]);
+      }
     }
-    else if (i == plain_text.length() - 1)
+    else if (i == input_data.length() - 1)
     {
-      for (unsigned int j = (i % 4) + 1; j < 4; ++j)
+      for (unsigned int j = (i % 8) + 1; j < 8; ++j)
       {
         data_block_in[j] = 0x00;
       }
 
-      IdeaEncryptBlock(&idea_ctx, data_block_in, data_block_out);
-      decrypted_text += std::string(reinterpret_cast<char*>(data_block_out));
+      IdeaDecryptBlock(&idea_ctx, data_block_in, data_block_out);
+      for (int k = 0; k < 8; ++k)
+      {
+        output_data.append(data_block_out[k]);
+      }
     }
   }
 
-  ui->plainTextEdit_decrypted->setPlainText(QString::fromStdString(decrypted_text));
+  ui->plainTextEdit_decrypted->setPlainText(QString::fromUtf8(output_data));
+  ui->statusBar->showMessage("Успешно расшифровано", STATUS_BAR_TIMEOUT);
 }
