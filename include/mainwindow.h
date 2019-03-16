@@ -30,6 +30,18 @@ private slots:
 
   void on_pushButton_text_decrypt_clicked();
 
+  void on_pushButton_open_file_srs_clicked();
+
+  void on_pushButton_open_file_dst_clicked();
+
+  void on_pushButton_cancel_clicked();
+
+  void on_pushButton_file_encrypt_clicked();
+
+  void on_pushButton_file_decrypt_clicked();
+
+  void on_pushButton_files_change_clicked();
+
 private:
   Ui::MainWindow *ui;
 
