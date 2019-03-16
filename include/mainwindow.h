@@ -36,17 +36,23 @@ private slots:
 
   void on_pushButton_open_file_dst_clicked();
 
-  void on_pushButton_cancel_clicked();
+  void on_pushButton_reset_clicked();
 
   void on_pushButton_file_encrypt_clicked();
 
   void on_pushButton_file_decrypt_clicked();
 
-  void on_pushButton_files_change_clicked();
+  void on_pushButton_files_switch_clicked();
 
   void ProcessText(QByteArray& i_data, QByteArray& o_data, bool i_encrypt);
 
   void ProcessFile(std::ifstream &i_fin, std::ofstream &i_fout, bool i_encrypt);
+
+  void on_pushButton_key_choose_clicked();
+
+  void on_pushButton_key_load_clicked();
+
+  void on_pushButton_key_save_clicked();
 
 private:
   Ui::MainWindow *ui;

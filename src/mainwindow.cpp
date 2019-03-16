@@ -7,6 +7,7 @@
 #include <random>
 #include <chrono>
 #include <fstream>
+#include <vector>
 
 #define STATUS_BAR_TIMEOUT 1800
 
@@ -138,7 +139,7 @@ void MainWindow::on_pushButton_open_file_dst_clicked()
   ui->lineEdit_file_dst->setText(temp_filename);
 }
 
-void MainWindow::on_pushButton_cancel_clicked()
+void MainWindow::on_pushButton_reset_clicked()
 {
   ui->lineEdit_file_dst->clear();
   ui->lineEdit_file_src->clear();
@@ -214,7 +215,7 @@ void MainWindow::on_pushButton_file_decrypt_clicked()
   ui->statusBar->showMessage("Файл успешно расшифрован", STATUS_BAR_TIMEOUT);
 }
 
-void MainWindow::on_pushButton_files_change_clicked()
+void MainWindow::on_pushButton_files_switch_clicked()
 {
   QString temp(ui->lineEdit_file_src->text());
   ui->lineEdit_file_src->setText(ui->lineEdit_file_dst->text());
@@ -305,4 +306,58 @@ void MainWindow::ProcessFile(std::ifstream &i_fin, std::ofstream &i_fout, bool i
 
     i_fout.write(reinterpret_cast<char*>(data_block_out), 8);
   }
+}
+
+void MainWindow::on_pushButton_key_choose_clicked()
+{
+  QString temp_filename;
+  temp_filename = QFileDialog::getSaveFileName(this, tr("Открыть ключевой файл"));
+  ui->lineEdit_key_file->setText(temp_filename);
+}
+
+void MainWindow::on_pushButton_key_load_clicked()
+{
+  std::ifstream fin;
+
+  fin.open(ui->lineEdit_key_file->text().toStdString().c_str(), std::ios_base::binary);
+  if (fin.is_open() == false)
+  {
+    ui->statusBar->showMessage("Не удалось открыть ключевой файл", STATUS_BAR_TIMEOUT);
+    fin.close();
+    return;
+  }
+
+  fin.seekg(0, std::ios_base::end);
+  int file_size = fin.tellg();
+  fin.seekg(0, std::ios_base::beg);
+
+  std::vector<char> temp_key_data(file_size, 0);
+  fin.read(temp_key_data.data(), file_size);
+  std::string temp_key_str(temp_key_data.begin(), temp_key_data.end());
+  fin.close();
+
+  ui->key_input->setText(QString::fromStdString(temp_key_str));
+
+  ui->statusBar->showMessage("Ключ успешно загружен", STATUS_BAR_TIMEOUT);
+}
+
+void MainWindow::on_pushButton_key_save_clicked()
+{
+  std::ofstream fout;
+
+  fout.open(ui->lineEdit_key_file->text().toStdString().c_str(), std::ios_base::binary);
+  if (fout.is_open() == false)
+  {
+    ui->statusBar->showMessage("Не удалось открыть ключевой файл", STATUS_BAR_TIMEOUT);
+    fout.close();
+    return;
+  }
+
+  std::string temp_key_str(ui->key_input->text().toStdString());
+
+  fout.write(temp_key_str.c_str(), temp_key_str.size());
+
+  fout.close();
+
+  ui->statusBar->showMessage("Ключ успешно сохранен", STATUS_BAR_TIMEOUT);
 }
