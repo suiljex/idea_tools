@@ -51,6 +51,38 @@
        <item>
         <widget class="QLineEdit" name="key_input"/>
        </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="2">
+          <widget class="QLineEdit" name="lineEdit_key_file"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="pushButton_key_choose">
+           <property name="text">
+            <string>Выбрать</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QPushButton" name="pushButton_key_load">
+           <property name="text">
+            <string>Загрузить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_key_save">
+           <property name="text">
+            <string>Сохранить</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
     </item>
@@ -149,14 +181,14 @@
             <widget class="QLineEdit" name="lineEdit_file_dst"/>
            </item>
            <item row="3" column="0">
-            <widget class="QPushButton" name="pushButton_cancel">
+            <widget class="QPushButton" name="pushButton_reset">
              <property name="text">
               <string>Сброс</string>
              </property>
             </widget>
            </item>
            <item row="2" column="0">
-            <widget class="QPushButton" name="pushButton_files_change">
+            <widget class="QPushButton" name="pushButton_files_switch">
              <property name="text">
               <string>Поменять файлы</string>
              </property>
@@ -185,9 +217,36 @@
      <string>Файл</string>
     </property>
     <addaction name="separator"/>
+    <addaction name="key_apply"/>
+    <addaction name="key_save"/>
+    <addaction name="key_load"/>
+    <addaction name="key_choose"/>
+    <addaction name="key_gen"/>
+    <addaction name="separator"/>
     <addaction name="exit"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Шифрование</string>
+    </property>
+    <widget class="QMenu" name="menu_3">
+     <property name="title">
+      <string>Выбор файлов</string>
+     </property>
+     <addaction name="file_open_src"/>
+     <addaction name="file_open_dst"/>
+     <addaction name="file_switch"/>
+     <addaction name="file_reset"/>
+    </widget>
+    <addaction name="text_encrypt"/>
+    <addaction name="text_decrypt"/>
+    <addaction name="separator"/>
+    <addaction name="file_encrypt"/>
+    <addaction name="file_decrypt"/>
+    <addaction name="menu_3"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -206,8 +265,282 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
+  <action name="key_gen">
+   <property name="text">
+    <string>Сгенерировать ключ</string>
+   </property>
+  </action>
+  <action name="text_encrypt">
+   <property name="text">
+    <string>Зашифровать текст</string>
+   </property>
+  </action>
+  <action name="text_decrypt">
+   <property name="text">
+    <string>Расшифровать текст</string>
+   </property>
+  </action>
+  <action name="key_apply">
+   <property name="text">
+    <string>Применить ключ</string>
+   </property>
+  </action>
+  <action name="file_encrypt">
+   <property name="text">
+    <string>Зашифровать файл</string>
+   </property>
+  </action>
+  <action name="file_decrypt">
+   <property name="text">
+    <string>Расшифровать файл</string>
+   </property>
+  </action>
+  <action name="file_open_src">
+   <property name="text">
+    <string>Открыть исходный файл</string>
+   </property>
+  </action>
+  <action name="file_open_dst">
+   <property name="text">
+    <string>Открыть целевой файл</string>
+   </property>
+  </action>
+  <action name="file_switch">
+   <property name="text">
+    <string>Поменять файлы</string>
+   </property>
+  </action>
+  <action name="file_reset">
+   <property name="text">
+    <string>Сбросить</string>
+   </property>
+  </action>
+  <action name="key_save">
+   <property name="text">
+    <string>Сохранить ключ</string>
+   </property>
+  </action>
+  <action name="key_load">
+   <property name="text">
+    <string>Загрузить ключ</string>
+   </property>
+  </action>
+  <action name="key_choose">
+   <property name="text">
+    <string>Выбрать ключевой файл</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>key_apply</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_applykey</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>432</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>key_gen</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_genkey</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>156</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>key_load</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_key_load</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>156</x>
+     <y>173</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>key_save</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_key_save</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>432</x>
+     <y>173</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>file_decrypt</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_file_decrypt</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>432</x>
+     <y>250</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>file_encrypt</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_file_encrypt</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>156</x>
+     <y>250</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>file_open_dst</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_open_file_dst</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>82</x>
+     <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>file_open_src</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_open_file_srs</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>86</x>
+     <y>308</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>file_reset</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_reset</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>71</x>
+     <y>392</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>file_switch</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_files_switch</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>91</x>
+     <y>364</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>text_decrypt</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_text_decrypt</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>294</x>
+     <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>text_encrypt</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_text_encrypt</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>294</x>
+     <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>key_choose</sender>
+   <signal>triggered()</signal>
+   <receiver>pushButton_key_choose</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>61</x>
+     <y>143</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
