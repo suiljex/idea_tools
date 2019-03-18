@@ -327,16 +327,27 @@ void MainWindow::on_pushButton_key_load_clicked()
     return;
   }
 
+  QRegExp reg_exp_key("^(1|0){128}$");
+  QRegExpValidator input_check(reg_exp_key, this);
+
   fin.seekg(0, std::ios_base::end);
   int file_size = fin.tellg();
   fin.seekg(0, std::ios_base::beg);
 
   std::vector<char> temp_key_data(file_size, 0);
   fin.read(temp_key_data.data(), file_size);
-  std::string temp_key_str(temp_key_data.begin(), temp_key_data.end());
   fin.close();
 
-  ui->key_input->setText(QString::fromStdString(temp_key_str));
+  QString temp_key_string(QString::fromStdString(std::string(temp_key_data.begin(), temp_key_data.end())));
+  int temp_pos = 0;
+
+  if (input_check.validate(temp_key_string, temp_pos) != QValidator::Acceptable)
+  {
+    ui->statusBar->showMessage("Некорректное содержимое ключевого файла", STATUS_BAR_TIMEOUT);
+    return;
+  }
+
+  ui->key_input->setText((temp_key_string));
 
   ui->statusBar->showMessage("Ключ успешно загружен", STATUS_BAR_TIMEOUT);
 }
