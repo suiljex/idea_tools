@@ -6,6 +6,7 @@
 #include <fstream>
 
 #include "idea.hpp"
+#include "demo.h"
 
 namespace Ui {
   class MainWindow;
@@ -54,8 +55,12 @@ private slots:
 
   void on_pushButton_key_save_clicked();
 
+  void on_start_demo_triggered();
+
 private:
   Ui::MainWindow *ui;
+
+  Demo *demo_form;
 
   bool key_applied;
   QString key_string;

@@ -372,3 +372,9 @@ void MainWindow::on_pushButton_key_save_clicked()
 
   ui->statusBar->showMessage("Ключ успешно сохранен", STATUS_BAR_TIMEOUT);
 }
+
+void MainWindow::on_start_demo_triggered()
+{
+  demo_form = new Demo(this);
+  demo_form->show();
+}
