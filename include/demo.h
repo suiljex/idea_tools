@@ -36,6 +36,10 @@ private:
 
   void FillInfoRoundDec(IdeaDemoRoundData i_round_data);
 
+  void FillInfoRoundFinEnc(IdeaDemoRoundData i_round_data);
+
+  void FillInfoRoundFinDec(IdeaDemoRoundData i_round_data);
+
   Ui::Demo *ui;
 
   bool key_applied;
