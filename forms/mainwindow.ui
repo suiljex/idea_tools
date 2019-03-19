@@ -231,7 +231,7 @@
     </property>
     <widget class="QMenu" name="menu_3">
      <property name="title">
-      <string>Выбор файлов</string>
+      <string>Выбор файла</string>
      </property>
      <addaction name="file_open_src"/>
      <addaction name="file_open_dst"/>
@@ -253,8 +253,10 @@
    </widget>
    <widget class="QMenu" name="menu_5">
     <property name="title">
-     <string>Справка</string>
+     <string>Помощь</string>
     </property>
+    <addaction name="help"/>
+    <addaction name="about"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -346,6 +348,16 @@
   <action name="start_demo">
    <property name="text">
     <string>Открыть</string>
+   </property>
+  </action>
+  <action name="help">
+   <property name="text">
+    <string>Справка</string>
+   </property>
+  </action>
+  <action name="about">
+   <property name="text">
+    <string>О программе</string>
    </property>
   </action>
  </widget>

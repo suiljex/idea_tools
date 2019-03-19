@@ -7,6 +7,8 @@
 
 #include "idea.hpp"
 #include "demo.h"
+#include "about.h"
+#include "help.h"
 
 namespace Ui {
   class MainWindow;
@@ -57,10 +59,16 @@ private slots:
 
   void on_start_demo_triggered();
 
+  void on_help_triggered();
+
+  void on_about_triggered();
+
 private:
   Ui::MainWindow *ui;
 
-  Demo *demo_form;
+  Demo *form_demo;
+  About *form_about;
+  Help* form_help;
 
   bool key_applied;
   QString key_string;
