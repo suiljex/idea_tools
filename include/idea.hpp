@@ -9,8 +9,8 @@
 
 typedef struct
 {
-   uint16_t keys_encryption[52];
-   uint16_t keys_decryption[52];
+  uint16_t keys_encryption[52];
+  uint16_t keys_decryption[52];
 } IdeaContext;
 
 unsigned int IdeaInit(IdeaContext *context, const uint8_t *key, size_t keyLen);
