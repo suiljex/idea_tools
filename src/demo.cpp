@@ -146,7 +146,7 @@ void Demo::on_comboBox_stages_currentIndexChanged(int index)
     ui->groupBox_keys->setEnabled(true);
     ui->groupBox_keys->setVisible(true);
 
-    FillInfoKeysEnc(idea_ctx.keys_decryption);
+    FillInfoKeysDec(idea_ctx.keys_decryption);
 
     ui->key_main->setText(key_string);
   }
@@ -159,12 +159,6 @@ void Demo::FillInfoKeysEnc(const uint16_t i_keys[52])
   if (i_keys == nullptr)
   {
     return;
-  }
-
-  QString temp;
-  for (auto it : ui->verticalLayout_shift_0->children())
-  {
-    temp = it->objectName();
   }
 
   ui->key_title_1->setText("Сдвиг на 0");
@@ -183,7 +177,7 @@ void Demo::FillInfoKeysEnc(const uint16_t i_keys[52])
   ui->key_6->setText(QString("EK6: ") + QString::number(i_keys[5], 2));
   ui->key_7->setText(QString("EK7: ") + QString::number(i_keys[6], 2));
   ui->key_8->setText(QString("EK8: ") + QString::number(i_keys[7], 2));
-  ui->key_9->setText(QString("EK9:  ") + QString::number(i_keys[8], 2));
+  ui->key_9->setText(QString("EK9: ") + QString::number(i_keys[8], 2));
   ui->key_10->setText(QString("EK10: ") + QString::number(i_keys[9], 2));
   ui->key_11->setText(QString("EK11: ") + QString::number(i_keys[10], 2));
   ui->key_12->setText(QString("EK12: ") + QString::number(i_keys[11], 2));
@@ -227,6 +221,79 @@ void Demo::FillInfoKeysEnc(const uint16_t i_keys[52])
   ui->key_50->setText(QString("EK50: ") + QString::number(i_keys[49], 2));
   ui->key_51->setText(QString("EK51: ") + QString::number(i_keys[50], 2));
   ui->key_52->setText(QString("EK52: ") + QString::number(i_keys[51], 2));
+  ui->key_53_d->clear();
+  ui->key_54_d->clear();
+  ui->key_55_d->clear();
+  ui->key_56_d->clear();
+}
+
+void Demo::FillInfoKeysDec(const uint16_t i_keys[52])
+{
+  if (i_keys == nullptr)
+  {
+    return;
+  }
+
+  ui->key_title_1->clear();
+  ui->key_title_2->clear();
+  ui->key_title_3->clear();
+  ui->key_title_4->clear();
+  ui->key_title_5->clear();
+  ui->key_title_6->clear();
+  ui->key_title_7->clear();
+
+  ui->key_1->setText(QString("DK1 = EK49^(-1): ") + QString::number(i_keys[0], 2));
+  ui->key_2->setText(QString("DK2 = -EK50: ") + QString::number(i_keys[1], 2));
+  ui->key_3->setText(QString("DK3 = -EK51: ") + QString::number(i_keys[2], 2));
+  ui->key_4->setText(QString("DK4 = EK52^(-1): ") + QString::number(i_keys[3], 2));
+  ui->key_5->setText(QString("DK5 = EK47: ") + QString::number(i_keys[4], 2));
+  ui->key_6->setText(QString("DK6 = EK48: ") + QString::number(i_keys[5], 2));
+  ui->key_7->setText(QString("DK7 = EK43^(-1): ") + QString::number(i_keys[6], 2));
+  ui->key_8->setText(QString("DK8 = -EK44: ") + QString::number(i_keys[7], 2));
+  ui->key_9->setText(QString("DK9 = -EK45:  ") + QString::number(i_keys[8], 2));
+  ui->key_10->setText(QString("DK10 = EK46^(-1): ") + QString::number(i_keys[9], 2));
+  ui->key_11->setText(QString("DK11 = EK41: ") + QString::number(i_keys[10], 2));
+  ui->key_12->setText(QString("DK12 = EK42: ") + QString::number(i_keys[11], 2));
+  ui->key_13->setText(QString("DK13 = EK37^(-1): ") + QString::number(i_keys[12], 2));
+  ui->key_14->setText(QString("DK14 = -EK38: ") + QString::number(i_keys[13], 2));
+  ui->key_15->setText(QString("DK15 = -EK39: ") + QString::number(i_keys[14], 2));
+  ui->key_16->setText(QString("DK16 = EK40^(-1): ") + QString::number(i_keys[15], 2));
+  ui->key_17->setText(QString("DK17 = EK35: ") + QString::number(i_keys[16], 2));
+  ui->key_18->setText(QString("DK18 = EK36: ") + QString::number(i_keys[17], 2));
+  ui->key_19->setText(QString("DK19 = EK31^(-1): ") + QString::number(i_keys[18], 2));
+  ui->key_20->setText(QString("DK20 = -EK32: ") + QString::number(i_keys[19], 2));
+  ui->key_21->setText(QString("DK21 = -EK33: ") + QString::number(i_keys[20], 2));
+  ui->key_22->setText(QString("DK22 = EK34^(-1): ") + QString::number(i_keys[21], 2));
+  ui->key_23->setText(QString("DK23 = EK29: ") + QString::number(i_keys[22], 2));
+  ui->key_24->setText(QString("DK24 = EK30: ") + QString::number(i_keys[23], 2));
+  ui->key_25->setText(QString("DK25 = EK25^(-1): ") + QString::number(i_keys[24], 2));
+  ui->key_26->setText(QString("DK26 = -EK26: ") + QString::number(i_keys[25], 2));
+  ui->key_27->setText(QString("DK27 = -EK27: ") + QString::number(i_keys[26], 2));
+  ui->key_28->setText(QString("DK28 = EK28^(-1): ") + QString::number(i_keys[27], 2));
+  ui->key_29->setText(QString("DK29 = EK23: ") + QString::number(i_keys[28], 2));
+  ui->key_30->setText(QString("DK30 = EK24: ") + QString::number(i_keys[29], 2));
+  ui->key_31->setText(QString("DK31 = EK19^(-1): ") + QString::number(i_keys[30], 2));
+  ui->key_32->setText(QString("DK32 = -EK20: ") + QString::number(i_keys[31], 2));
+  ui->key_33->setText(QString("DK33 = -EK21: ") + QString::number(i_keys[32], 2));
+  ui->key_34->setText(QString("DK34 = EK22^(-1): ") + QString::number(i_keys[33], 2));
+  ui->key_35->setText(QString("DK35 = EK17: ") + QString::number(i_keys[34], 2));
+  ui->key_36->setText(QString("DK36 = EK18: ") + QString::number(i_keys[35], 2));
+  ui->key_37->setText(QString("DK37 = EK13^(-1): ") + QString::number(i_keys[36], 2));
+  ui->key_38->setText(QString("DK38 = -EK14: ") + QString::number(i_keys[37], 2));
+  ui->key_39->setText(QString("DK39 = -EK15: ") + QString::number(i_keys[38], 2));
+  ui->key_40->setText(QString("DK40 = EK16^(-1): ") + QString::number(i_keys[39], 2));
+  ui->key_41->setText(QString("DK41 = EK11: ") + QString::number(i_keys[40], 2));
+  ui->key_42->setText(QString("DK42 = EK12: ") + QString::number(i_keys[41], 2));
+  ui->key_43->setText(QString("DK43 = EK7^(-1): ") + QString::number(i_keys[42], 2));
+  ui->key_44->setText(QString("DK44 = -EK8: ") + QString::number(i_keys[43], 2));
+  ui->key_45->setText(QString("DK45 = -EK9: ") + QString::number(i_keys[44], 2));
+  ui->key_46->setText(QString("DK46 = EK10^(-1): ") + QString::number(i_keys[45], 2));
+  ui->key_47->setText(QString("DK47 = EK5: ") + QString::number(i_keys[46], 2));
+  ui->key_48->setText(QString("DK48 = EK6: ") + QString::number(i_keys[47], 2));
+  ui->key_49->setText(QString("DK49 = EK1^(-1): ") + QString::number(i_keys[48], 2));
+  ui->key_50->setText(QString("DK50 = -EK2: ") + QString::number(i_keys[49], 2));
+  ui->key_51->setText(QString("DK51 = -EK3: ") + QString::number(i_keys[50], 2));
+  ui->key_52->setText(QString("DK52 = EK4^(-1): ") + QString::number(i_keys[51], 2));
   ui->key_53_d->clear();
   ui->key_54_d->clear();
   ui->key_55_d->clear();
