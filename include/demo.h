@@ -27,6 +27,9 @@ private slots:
   void on_comboBox_stages_currentIndexChanged(int index);
 
 private:
+
+  void FillInfoKeysEnc(const uint16_t i_keys[52]);
+
   Ui::Demo *ui;
 
   bool key_applied;
