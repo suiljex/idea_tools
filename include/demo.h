@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "idea.hpp"
+#include "idea_demo.hpp"
 
 namespace Ui {
   class Demo;
@@ -37,7 +37,10 @@ private:
   bool key_applied;
   QString key_string;
   uint8_t key_data[16];
-  IdeaContext idea_ctx;
+  IdeaDemoContext idea_ctx;
+
+  std::vector<IdeaDemoRoundData> rounds_data_encryption;
+  std::vector<IdeaDemoRoundData> rounds_data_decryption;
 };
 
 #endif // DEMO_H

@@ -41,7 +41,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="edit_data"/>
+           <widget class="QLineEdit" name="edit_data">
+            <property name="text">
+             <string>#suiljex</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
