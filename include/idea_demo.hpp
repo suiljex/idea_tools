@@ -16,6 +16,7 @@ typedef struct
 
 typedef struct
 {
+  uint32_t round_number;
   uint16_t block_input[4];
   //uint16_t block_out[4];
   uint16_t keys_used[6];

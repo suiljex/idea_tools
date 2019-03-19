@@ -176,6 +176,26 @@ void Demo::on_comboBox_stages_currentIndexChanged(int index)
 
     ui->key_main->setText(key_string);
   }
+  else if (index > 0 && index < 9)
+  {
+    ui->groupBox_round->setEnabled(true);
+    ui->groupBox_round->setVisible(true);
+
+    if (index - 1 < rounds_data_encryption.size())
+    {
+      FillInfoRoundEnc(rounds_data_encryption[index - 1]);
+    }
+  }
+  else if (index > 10 && index < 19)
+  {
+    ui->groupBox_round->setEnabled(true);
+    ui->groupBox_round->setVisible(true);
+
+    if (index - 11 < rounds_data_encryption.size())
+    {
+      FillInfoRoundDec(rounds_data_encryption[index - 11]);
+    }
+  }
 
   ui->statusbar->showMessage(temp_mess, STATUS_BAR_TIMEOUT);
 }
@@ -324,4 +344,194 @@ void Demo::FillInfoKeysDec(const uint16_t i_keys[52])
   ui->key_54_d->clear();
   ui->key_55_d->clear();
   ui->key_56_d->clear();
+}
+
+void Demo::FillInfoRoundEnc(IdeaDemoRoundData i_round_data)
+{
+  QString temp_text;
+
+  temp_text = "R1 = X1 * EK"
+      + QString::number(i_round_data.round_number * 6 + 1)
+      + " = " + QString::number(i_round_data.block_input[0], 2)
+      + " * " + QString::number(i_round_data.keys_used[0], 2)
+      + " = " + QString::number(i_round_data.inner_data[0], 2);
+  ui->round_r1->setText(temp_text);
+
+  temp_text = "R2 = X2 + EK"
+      + QString::number(i_round_data.round_number * 6 + 2)
+      + " = " + QString::number(i_round_data.block_input[1], 2)
+      + " + " + QString::number(i_round_data.keys_used[1], 2)
+      + " = " + QString::number(i_round_data.inner_data[1], 2);
+  ui->round_r2->setText(temp_text);
+
+  temp_text = "R3 = X3 + EK"
+      + QString::number(i_round_data.round_number * 6 + 3)
+      + " = " + QString::number(i_round_data.block_input[2], 2)
+      + " + " + QString::number(i_round_data.keys_used[2], 2)
+      + " = " + QString::number(i_round_data.inner_data[2], 2);
+  ui->round_r3->setText(temp_text);
+
+  temp_text = "R4 = X4 * EK"
+      + QString::number(i_round_data.round_number * 6 + 4)
+      + " = " + QString::number(i_round_data.block_input[3], 2)
+      + " * " + QString::number(i_round_data.keys_used[3], 2)
+      + " = " + QString::number(i_round_data.inner_data[3], 2);
+  ui->round_r4->setText(temp_text);
+
+  temp_text = "R5 = R1 xor R3 = "
+      + QString::number(i_round_data.inner_data[0], 2)
+      + " xor " + QString::number(i_round_data.inner_data[2], 2)
+      + " = " + QString::number(i_round_data.inner_data[4], 2);
+  ui->round_r5->setText(temp_text);
+
+  temp_text = "R6 = R2 xor R4 = "
+      + QString::number(i_round_data.inner_data[1], 2)
+      + " xor " + QString::number(i_round_data.inner_data[3], 2)
+      + " = " + QString::number(i_round_data.inner_data[5], 2);
+  ui->round_r6->setText(temp_text);
+
+  temp_text = "R7 = R5 * EK"
+      + QString::number(i_round_data.round_number * 6 + 5)
+      + " = " + QString::number(i_round_data.inner_data[4], 2)
+      + " * " + QString::number(i_round_data.keys_used[4], 2)
+      + " = " + QString::number(i_round_data.inner_data[6], 2);
+  ui->round_r7->setText(temp_text);
+
+  temp_text = "R8 = R6 + R7 = "
+      + QString::number(i_round_data.inner_data[5], 2)
+      + " + " + QString::number(i_round_data.inner_data[6], 2)
+      + " = " + QString::number(i_round_data.inner_data[7], 2);
+  ui->round_r8->setText(temp_text);
+
+  temp_text = "R9 = R8 * EK"
+      + QString::number(i_round_data.round_number * 6 + 6)
+      + " = " + QString::number(i_round_data.inner_data[7], 2)
+      + " * " + QString::number(i_round_data.keys_used[5], 2)
+      + " = " + QString::number(i_round_data.inner_data[8], 2);
+  ui->round_r9->setText(temp_text);
+
+  temp_text = "R10 = R7 + R9 = "
+      + QString::number(i_round_data.inner_data[7], 2)
+      + " + " + QString::number(i_round_data.inner_data[9], 2)
+      + " = " + QString::number(i_round_data.inner_data[10], 2);
+  ui->round_r10->setText(temp_text);
+
+  temp_text = "R11 = R1 xor R9 = "
+      + QString::number(i_round_data.inner_data[0], 2)
+      + " xor " + QString::number(i_round_data.inner_data[8], 2)
+      + " = " + QString::number(i_round_data.inner_data[10], 2);
+  ui->round_r11->setText(temp_text);
+
+  temp_text = "R12 = R3 xor R9 = "
+      + QString::number(i_round_data.inner_data[2], 2)
+      + " xor " + QString::number(i_round_data.inner_data[8], 2)
+      + " = " + QString::number(i_round_data.inner_data[11], 2);
+  ui->round_r12->setText(temp_text);
+
+  temp_text = "R13 = R2 xor R10 = "
+      + QString::number(i_round_data.inner_data[1], 2)
+      + " xor " + QString::number(i_round_data.inner_data[9], 2)
+      + " = " + QString::number(i_round_data.inner_data[12], 2);
+  ui->round_r13->setText(temp_text);
+
+  temp_text = "R14 = R4 xor R10 = "
+      + QString::number(i_round_data.inner_data[3], 2)
+      + " xor " + QString::number(i_round_data.inner_data[9], 2)
+      + " = " + QString::number(i_round_data.inner_data[13], 2);
+  ui->round_r14->setText(temp_text);
+}
+
+void Demo::FillInfoRoundDec(IdeaDemoRoundData i_round_data)
+{
+  QString temp_text;
+
+  temp_text = "R1 = X1 * DK"
+      + QString::number(i_round_data.round_number * 6 + 1)
+      + " = " + QString::number(i_round_data.block_input[0], 2)
+      + " * " + QString::number(i_round_data.keys_used[0], 2)
+      + " = " + QString::number(i_round_data.inner_data[0], 2);
+  ui->round_r1->setText(temp_text);
+
+  temp_text = "R2 = X2 + DK"
+      + QString::number(i_round_data.round_number * 6 + 2)
+      + " = " + QString::number(i_round_data.block_input[1], 2)
+      + " + " + QString::number(i_round_data.keys_used[1], 2)
+      + " = " + QString::number(i_round_data.inner_data[1], 2);
+  ui->round_r2->setText(temp_text);
+
+  temp_text = "R3 = X3 + DK"
+      + QString::number(i_round_data.round_number * 6 + 3)
+      + " = " + QString::number(i_round_data.block_input[2], 2)
+      + " + " + QString::number(i_round_data.keys_used[2], 2)
+      + " = " + QString::number(i_round_data.inner_data[2], 2);
+  ui->round_r3->setText(temp_text);
+
+  temp_text = "R4 = X4 * DK"
+      + QString::number(i_round_data.round_number * 6 + 4)
+      + " = " + QString::number(i_round_data.block_input[3], 2)
+      + " * " + QString::number(i_round_data.keys_used[3], 2)
+      + " = " + QString::number(i_round_data.inner_data[3], 2);
+  ui->round_r4->setText(temp_text);
+
+  temp_text = "R5 = R1 xor R3 = "
+      + QString::number(i_round_data.inner_data[0])
+      + " xor " + QString::number(i_round_data.inner_data[2], 2)
+      + " = " + QString::number(i_round_data.inner_data[4], 2);
+  ui->round_r5->setText(temp_text);
+
+  temp_text = "R6 = R2 xor R4 = "
+      + QString::number(i_round_data.inner_data[1])
+      + " xor " + QString::number(i_round_data.inner_data[3], 2)
+      + " = " + QString::number(i_round_data.inner_data[5], 2);
+  ui->round_r6->setText(temp_text);
+
+  temp_text = "R7 = R5 * DK"
+      + QString::number(i_round_data.round_number * 6 + 5)
+      + " = " + QString::number(i_round_data.inner_data[4], 2)
+      + " * " + QString::number(i_round_data.keys_used[4], 2)
+      + " = " + QString::number(i_round_data.inner_data[6], 2);
+  ui->round_r7->setText(temp_text);
+
+  temp_text = "R8 = R6 + R7 = "
+      + QString::number(i_round_data.inner_data[5], 2)
+      + " + " + QString::number(i_round_data.inner_data[6], 2)
+      + " = " + QString::number(i_round_data.inner_data[7], 2);
+  ui->round_r8->setText(temp_text);
+
+  temp_text = "R9 = R8 * DK"
+      + QString::number(i_round_data.round_number * 6 + 6)
+      + " = " + QString::number(i_round_data.inner_data[7], 2)
+      + " * " + QString::number(i_round_data.keys_used[5], 2)
+      + " = " + QString::number(i_round_data.inner_data[8], 2);
+  ui->round_r9->setText(temp_text);
+
+  temp_text = "R10 = R7 + R9 = "
+      + QString::number(i_round_data.inner_data[7], 2)
+      + " + " + QString::number(i_round_data.inner_data[9], 2)
+      + " = " + QString::number(i_round_data.inner_data[10], 2);
+  ui->round_r10->setText(temp_text);
+
+  temp_text = "R11 = R1 xor R9 = "
+      + QString::number(i_round_data.inner_data[0], 2)
+      + " xor " + QString::number(i_round_data.inner_data[8], 2)
+      + " = " + QString::number(i_round_data.inner_data[10], 2);
+  ui->round_r11->setText(temp_text);
+
+  temp_text = "R12 = R3 xor R9 = "
+      + QString::number(i_round_data.inner_data[2], 2)
+      + " xor " + QString::number(i_round_data.inner_data[8], 2)
+      + " = " + QString::number(i_round_data.inner_data[11], 2);
+  ui->round_r12->setText(temp_text);
+
+  temp_text = "R13 = R2 xor R10 = "
+      + QString::number(i_round_data.inner_data[1], 2)
+      + " xor " + QString::number(i_round_data.inner_data[9], 2)
+      + " = " + QString::number(i_round_data.inner_data[12], 2);
+  ui->round_r13->setText(temp_text);
+
+  temp_text = "R14 = R4 xor R10 = "
+      + QString::number(i_round_data.inner_data[3], 2)
+      + " xor " + QString::number(i_round_data.inner_data[9], 2)
+      + " = " + QString::number(i_round_data.inner_data[13], 2);
+  ui->round_r14->setText(temp_text);
 }
