@@ -13,14 +13,20 @@ HEADERS +=  include/idea.hpp \
             include/crypto.hpp \
             include/mainwindow.h \
             include/idea_demo.hpp \
-            include/demo.h
+            include/demo.h \
+            include/about.h \
+            include/help.h
 
 SOURCES +=  src/idea.cpp \
             src/main.cpp \
             src/mainwindow.cpp \
             src/idea_demo.cpp \
-            src/demo.cpp
+            src/demo.cpp \
+            src/about.cpp \
+            src/help.cpp
             
 
 FORMS +=    forms/mainwindow.ui \
-            forms/demo.ui
+            forms/demo.ui \
+            forms/about.ui \
+            forms/help.ui

@@ -375,6 +375,18 @@ void MainWindow::on_pushButton_key_save_clicked()
 
 void MainWindow::on_start_demo_triggered()
 {
-  demo_form = new Demo(this);
-  demo_form->show();
+  form_demo = new Demo(this);
+  form_demo->show();
+}
+
+void MainWindow::on_help_triggered()
+{
+  form_help = new Help(this);
+  form_help->show();
+}
+
+void MainWindow::on_about_triggered()
+{
+  form_about = new About(this);
+  form_about->show();
 }
