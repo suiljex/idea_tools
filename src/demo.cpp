@@ -140,9 +140,6 @@ void Demo::on_pushButton_prev_clicked()
 
 void Demo::on_comboBox_stages_currentIndexChanged(int index)
 {
-  QString temp_mess("Changed ");
-  temp_mess += QString::number(index);
-
   ui->pushButton_next->setEnabled(true);
   ui->pushButton_prev->setEnabled(true);
 
@@ -216,7 +213,7 @@ void Demo::on_comboBox_stages_currentIndexChanged(int index)
     }
   }
 
-  ui->statusbar->showMessage(temp_mess, STATUS_BAR_TIMEOUT);
+  ui->statusbar->showMessage(ui->comboBox_stages->currentText(), STATUS_BAR_TIMEOUT);
 }
 
 void Demo::FillInfoKeysEnc(const uint16_t i_keys[52])

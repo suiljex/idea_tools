@@ -93,7 +93,7 @@
       </property>
       <widget class="QWidget" name="tab_encrypt">
        <attribute name="title">
-        <string>Зашифровать текст</string>
+        <string>Нешифрованный текст</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
@@ -110,7 +110,7 @@
       </widget>
       <widget class="QWidget" name="tab_decrypt">
        <attribute name="title">
-        <string>Расшифровать текст</string>
+        <string>Зашифрованный текст</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
