@@ -36,6 +36,9 @@ Demo::Demo(QWidget *parent) :
   ui->groupBox_round->setEnabled(false);
   ui->groupBox_round->setVisible(false);
 
+  ui->groupBox_round_fin->setEnabled(false);
+  ui->groupBox_round_fin->setVisible(false);
+
   ui->groupBox_placeholder->setEnabled(true);
   ui->groupBox_placeholder->setVisible(true);
 }
@@ -157,6 +160,8 @@ void Demo::on_comboBox_stages_currentIndexChanged(int index)
   ui->groupBox_keys->setVisible(false);
   ui->groupBox_round->setEnabled(false);
   ui->groupBox_round->setVisible(false);
+  ui->groupBox_round_fin->setEnabled(false);
+  ui->groupBox_round_fin->setVisible(false);
 
   if (index == 0)
   {
@@ -175,6 +180,20 @@ void Demo::on_comboBox_stages_currentIndexChanged(int index)
     FillInfoKeysDec(idea_ctx.keys_decryption);
 
     ui->key_main->setText(key_string);
+  }
+  else if(index == 9)
+  {
+    ui->groupBox_round_fin->setEnabled(true);
+    ui->groupBox_round_fin->setVisible(true);
+
+    FillInfoRoundFinEnc(rounds_data_encryption[index - 1]);
+  }
+  else if(index == 19)
+  {
+    ui->groupBox_round_fin->setEnabled(true);
+    ui->groupBox_round_fin->setVisible(true);
+
+    FillInfoRoundFinDec(rounds_data_decryption[index - 11]);
   }
   else if (index > 0 && index < 9)
   {
@@ -534,4 +553,70 @@ void Demo::FillInfoRoundDec(IdeaDemoRoundData i_round_data)
       + " xor " + QString::number(i_round_data.inner_data[9], 2)
       + " = " + QString::number(i_round_data.inner_data[13], 2);
   ui->round_r14->setText(temp_text);
+}
+
+void Demo::FillInfoRoundFinEnc(IdeaDemoRoundData i_round_data)
+{
+  QString temp_text;
+
+  temp_text = "X1 = X1 * EK"
+      + QString::number(i_round_data.round_number * 6 + 1)
+      + " = " + QString::number(i_round_data.block_input[0], 2)
+      + " * " + QString::number(i_round_data.keys_used[0], 2)
+      + " = " + QString::number(i_round_data.inner_data[0], 2);
+  ui->round_fin_1 ->setText(temp_text);
+
+  temp_text = "X2 = X2 + EK"
+      + QString::number(i_round_data.round_number * 6 + 1)
+      + " = " + QString::number(i_round_data.block_input[1], 2)
+      + " + " + QString::number(i_round_data.keys_used[1], 2)
+      + " = " + QString::number(i_round_data.inner_data[1], 2);
+  ui->round_fin_2 ->setText(temp_text);
+
+  temp_text = "X3 = X3 + EK"
+      + QString::number(i_round_data.round_number * 6 + 1)
+      + " = " + QString::number(i_round_data.block_input[2], 2)
+      + " + " + QString::number(i_round_data.keys_used[2], 2)
+      + " = " + QString::number(i_round_data.inner_data[2], 2);
+  ui->round_fin_3 ->setText(temp_text);
+
+  temp_text = "X4 = X4 * EK"
+      + QString::number(i_round_data.round_number * 6 + 1)
+      + " = " + QString::number(i_round_data.block_input[3], 2)
+      + " * " + QString::number(i_round_data.keys_used[3], 2)
+      + " = " + QString::number(i_round_data.inner_data[3], 2);
+  ui->round_fin_4 ->setText(temp_text);
+}
+
+void Demo::FillInfoRoundFinDec(IdeaDemoRoundData i_round_data)
+{
+  QString temp_text;
+
+  temp_text = "X1 = X1 * DK"
+      + QString::number(i_round_data.round_number * 6 + 1)
+      + " = " + QString::number(i_round_data.block_input[0], 2)
+      + " * " + QString::number(i_round_data.keys_used[0], 2)
+      + " = " + QString::number(i_round_data.inner_data[0], 2);
+  ui->round_fin_1 ->setText(temp_text);
+
+  temp_text = "X2 = X2 + DK"
+      + QString::number(i_round_data.round_number * 6 + 1)
+      + " = " + QString::number(i_round_data.block_input[1], 2)
+      + " + " + QString::number(i_round_data.keys_used[1], 2)
+      + " = " + QString::number(i_round_data.inner_data[1], 2);
+  ui->round_fin_2 ->setText(temp_text);
+
+  temp_text = "X3 = X3 + DK"
+      + QString::number(i_round_data.round_number * 6 + 1)
+      + " = " + QString::number(i_round_data.block_input[2], 2)
+      + " + " + QString::number(i_round_data.keys_used[2], 2)
+      + " = " + QString::number(i_round_data.inner_data[2], 2);
+  ui->round_fin_3 ->setText(temp_text);
+
+  temp_text = "X4 = X4 * DK"
+      + QString::number(i_round_data.round_number * 6 + 1)
+      + " = " + QString::number(i_round_data.block_input[3], 2)
+      + " * " + QString::number(i_round_data.keys_used[3], 2)
+      + " = " + QString::number(i_round_data.inner_data[3], 2);
+  ui->round_fin_4 ->setText(temp_text);
 }
