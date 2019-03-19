@@ -32,6 +32,10 @@ private:
 
   void FillInfoKeysDec(const uint16_t i_keys[52]);
 
+  void FillInfoRoundEnc(IdeaDemoRoundData i_round_data);
+
+  void FillInfoRoundDec(IdeaDemoRoundData i_round_data);
+
   Ui::Demo *ui;
 
   bool key_applied;

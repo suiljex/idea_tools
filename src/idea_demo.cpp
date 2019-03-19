@@ -141,6 +141,8 @@ std::vector<IdeaDemoRoundData> IdeaDemoEncryptBlock(IdeaDemoContext *context, co
   //The process consists of eight identical encryption steps
   for(i = 0; i < 8; i++)
   {
+    temp_round_data.round_number = i;
+
     temp_round_data.block_input[0] = a;
     temp_round_data.block_input[1] = b;
     temp_round_data.block_input[2] = c;
@@ -194,6 +196,8 @@ std::vector<IdeaDemoRoundData> IdeaDemoEncryptBlock(IdeaDemoContext *context, co
 
     ret_rounds_data.push_back(temp_round_data);
   }
+
+  temp_round_data.round_number = i;
 
   temp_round_data.block_input[0] = a;
   temp_round_data.block_input[1] = b;
@@ -262,6 +266,8 @@ std::vector<IdeaDemoRoundData> IdeaDemoDecryptBlock(IdeaDemoContext *context, co
   //The process consists of eight identical encryption steps
   for(i = 0; i < 8; i++)
   {
+    temp_round_data.round_number = i;
+
     temp_round_data.block_input[0] = a;
     temp_round_data.block_input[1] = b;
     temp_round_data.block_input[2] = c;
@@ -315,6 +321,8 @@ std::vector<IdeaDemoRoundData> IdeaDemoDecryptBlock(IdeaDemoContext *context, co
 
     ret_rounds_data.push_back(temp_round_data);
   }
+
+  temp_round_data.round_number = i;
 
   temp_round_data.block_input[0] = a;
   temp_round_data.block_input[1] = b;
