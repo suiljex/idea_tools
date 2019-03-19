@@ -12,11 +12,13 @@ HEADERS +=  include/idea.hpp \
             include/defines.hpp \
             include/crypto.hpp \
             include/mainwindow.h \
+            include/idea_demo.hpp \
             include/demo.h
 
 SOURCES +=  src/idea.cpp \
             src/main.cpp \
             src/mainwindow.cpp \
+            src/idea_demo.cpp \
             src/demo.cpp
             
 

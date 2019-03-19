@@ -3,6 +3,7 @@
 
 #include <random>
 #include <chrono>
+#include <vector>
 
 #define STATUS_BAR_TIMEOUT 1800
 
@@ -47,10 +48,17 @@ Demo::~Demo()
 void Demo::on_pushButton_start_clicked()
 {
   QString new_key(ui->edit_key->text());
+  QString block_str(ui->edit_data->text());
 
   if (new_key.length() != 128)
   {
     ui->statusbar->showMessage("Короткий ключ", STATUS_BAR_TIMEOUT);
+    return;
+  }
+
+  if (block_str.length() > 8)
+  {
+    ui->statusbar->showMessage("Слишком длинный блок", STATUS_BAR_TIMEOUT);
     return;
   }
 
@@ -66,7 +74,23 @@ void Demo::on_pushButton_start_clicked()
     ++current_index;
   }
 
-  IdeaInit(&idea_ctx, key_data, 16);
+  uint8_t block_plain[8];
+  uint8_t block_cipher[8];
+
+  const char* temp_data = block_str.toStdString().c_str();
+  unsigned int i, j;
+  for (i = 0; i < strlen(temp_data) && i < 8; ++i)
+  {
+    block_plain[i] = temp_data[i];
+  }
+  for (j = i; j < 8; ++j)
+  {
+    block_plain[j] = 0x00;
+  }
+
+  IdeaDemoInit(&idea_ctx, key_data, 16);
+  rounds_data_encryption = IdeaDemoEncryptBlock(&idea_ctx, block_plain, block_cipher);
+  rounds_data_decryption = IdeaDemoDecryptBlock(&idea_ctx, block_cipher, block_plain);
 
   ui->comboBox_stages->addItem("Генерация Ключей раундов шифрования");
   ui->comboBox_stages->addItem("Раунд шифрования 1");
@@ -77,6 +101,7 @@ void Demo::on_pushButton_start_clicked()
   ui->comboBox_stages->addItem("Раунд шифрования 6");
   ui->comboBox_stages->addItem("Раунд шифрования 7");
   ui->comboBox_stages->addItem("Раунд шифрования 8");
+  ui->comboBox_stages->addItem("Финальный раунд шифрования");
   ui->comboBox_stages->addItem("Генерация Ключей раундов дешифрования");
   ui->comboBox_stages->addItem("Раунд дешифрования 1");
   ui->comboBox_stages->addItem("Раунд дешифрования 2");
@@ -86,6 +111,7 @@ void Demo::on_pushButton_start_clicked()
   ui->comboBox_stages->addItem("Раунд дешифрования 6");
   ui->comboBox_stages->addItem("Раунд дешифрования 7");
   ui->comboBox_stages->addItem("Раунд дешифрования 8");
+  ui->comboBox_stages->addItem("Финальный раунд дешифрования");
 
   ui->comboBox_stages->setCurrentIndex(-1);
 
@@ -141,7 +167,7 @@ void Demo::on_comboBox_stages_currentIndexChanged(int index)
 
     ui->key_main->setText(key_string);
   }
-  else if (index == 9)
+  else if (index == 10)
   {
     ui->groupBox_keys->setEnabled(true);
     ui->groupBox_keys->setVisible(true);
