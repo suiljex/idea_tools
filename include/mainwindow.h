@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFile>
 
 #include <fstream>
 
@@ -49,7 +50,7 @@ private slots:
 
   void ProcessText(QByteArray& i_data, QByteArray& o_data, bool i_encrypt);
 
-  void ProcessFile(std::ifstream &i_fin, std::ofstream &i_fout, bool i_encrypt);
+  void ProcessFile(QFile &i_fin, QFile &i_fout, bool i_encrypt);
 
   void on_pushButton_key_choose_clicked();
 
