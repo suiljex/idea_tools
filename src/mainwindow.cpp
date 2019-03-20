@@ -153,19 +153,17 @@ void MainWindow::on_pushButton_file_encrypt_clicked()
     return;
   }
 
-  std::ifstream fin;
-  std::ofstream fout;
+  QFile fin(ui->lineEdit_file_src->text());
+  QFile fout(ui->lineEdit_file_dst->text());
 
-  fin.open(ui->lineEdit_file_src->text().toStdString().c_str(), std::ios_base::binary);
-  if (fin.is_open() == false)
+  if (fin.open(QIODevice::ReadOnly) == false)
   {
     ui->statusBar->showMessage("Не удалось открыть исходный файл", STATUS_BAR_TIMEOUT);
     fin.close();
     return;
   }
 
-  fout.open(ui->lineEdit_file_dst->text().toStdString().c_str(), std::ios_base::binary);
-  if (fout.is_open() == false)
+  if (fout.open(QIODevice::WriteOnly) == false)
   {
     ui->statusBar->showMessage("Не удалось открыть целевой файл", STATUS_BAR_TIMEOUT);
     fin.close();
@@ -188,19 +186,17 @@ void MainWindow::on_pushButton_file_decrypt_clicked()
     return;
   }
 
-  std::ifstream fin;
-  std::ofstream fout;
+  QFile fin(ui->lineEdit_file_src->text());
+  QFile fout(ui->lineEdit_file_dst->text());
 
-  fin.open(ui->lineEdit_file_src->text().toStdString().c_str(), std::ios_base::binary);
-  if (fin.is_open() == false)
+  if (fin.open(QIODevice::ReadOnly) == false)
   {
     ui->statusBar->showMessage("Не удалось открыть исходный файл", STATUS_BAR_TIMEOUT);
     fin.close();
     return;
   }
 
-  fout.open(ui->lineEdit_file_dst->text().toStdString().c_str(), std::ios_base::binary);
-  if (fout.is_open() == false)
+  if (fout.open(QIODevice::WriteOnly) == false)
   {
     ui->statusBar->showMessage("Не удалось открыть целевой файл", STATUS_BAR_TIMEOUT);
     fin.close();
@@ -271,20 +267,18 @@ void MainWindow::ProcessText(QByteArray &i_data, QByteArray &o_data, bool i_encr
   }
 }
 
-void MainWindow::ProcessFile(std::ifstream &i_fin, std::ofstream &i_fout, bool i_encrypt)
+void MainWindow::ProcessFile(QFile &i_fin, QFile &i_fout, bool i_encrypt)
 {
   uint8_t data_block_in[8] = {0};
   uint8_t data_block_out[8] = {0};
 
-  i_fin.seekg(0, std::ios_base::end);
-  int file_size = i_fin.tellg();
-  i_fin.seekg(0, std::ios_base::beg);
+  int file_size = i_fin.size();
 
   int temp_size_left;
 
-  while (i_fin.tellg() < file_size)
+  while (i_fin.atEnd() == false)
   {
-    temp_size_left = file_size - i_fin.tellg();
+    temp_size_left = file_size - i_fin.pos();
 
     if (temp_size_left < 8)
     {
@@ -321,10 +315,9 @@ void MainWindow::on_pushButton_key_choose_clicked()
 
 void MainWindow::on_pushButton_key_load_clicked()
 {
-  std::ifstream fin;
+  QFile fin(ui->lineEdit_key_file->text());
 
-  fin.open(ui->lineEdit_key_file->text().toStdString().c_str(), std::ios_base::binary);
-  if (fin.is_open() == false)
+  if (fin.open(QIODevice::ReadOnly) == false)
   {
     ui->statusBar->showMessage("Не удалось открыть ключевой файл", STATUS_BAR_TIMEOUT);
     fin.close();
@@ -334,9 +327,7 @@ void MainWindow::on_pushButton_key_load_clicked()
   QRegExp reg_exp_key("^(1|0){128}$");
   QRegExpValidator input_check(reg_exp_key, this);
 
-  fin.seekg(0, std::ios_base::end);
-  int file_size = fin.tellg();
-  fin.seekg(0, std::ios_base::beg);
+  int file_size = fin.size();
 
   std::vector<char> temp_key_data(file_size, 0);
   fin.read(temp_key_data.data(), file_size);
@@ -358,10 +349,9 @@ void MainWindow::on_pushButton_key_load_clicked()
 
 void MainWindow::on_pushButton_key_save_clicked()
 {
-  std::ofstream fout;
+  QFile fout(ui->lineEdit_key_file->text());
 
-  fout.open(ui->lineEdit_key_file->text().toStdString().c_str(), std::ios_base::binary);
-  if (fout.is_open() == false)
+  if (fout.open(QIODevice::WriteOnly) == false)
   {
     ui->statusBar->showMessage("Не удалось открыть ключевой файл", STATUS_BAR_TIMEOUT);
     fout.close();
