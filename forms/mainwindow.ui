@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>622</width>
-    <height>536</height>
+    <height>513</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,6 +34,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QPushButton" name="pushButton_genkey">
+           <property name="toolTip">
+            <string>Сгенерировать ключ 128 бит</string>
+           </property>
            <property name="text">
             <string>Сгенерировать ключ</string>
            </property>
@@ -64,6 +67,9 @@
             </item>
             <item row="1" column="0">
              <widget class="QPushButton" name="pushButton_key_choose">
+              <property name="toolTip">
+               <string>Выбрать ключевой файл</string>
+              </property>
               <property name="text">
                <string>Выбрать</string>
               </property>
@@ -75,6 +81,9 @@
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
              <widget class="QPushButton" name="pushButton_key_load">
+              <property name="toolTip">
+               <string>Загрузить ключевой файл</string>
+              </property>
               <property name="text">
                <string>Загрузить</string>
               </property>
@@ -82,6 +91,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="pushButton_key_save">
+              <property name="toolTip">
+               <string>Сохранить ключевой файл</string>
+              </property>
               <property name="text">
                <string>Сохранить</string>
               </property>
@@ -98,7 +110,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_encrypt">
        <attribute name="title">
@@ -107,6 +119,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QPushButton" name="pushButton_text_encrypt">
+          <property name="toolTip">
+           <string>Зашифровать текст и поместить его на вкладку &quot;зашифрованный текст&quot;</string>
+          </property>
           <property name="text">
            <string>Зашифровать</string>
           </property>
@@ -124,6 +139,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
          <widget class="QPushButton" name="pushButton_text_decrypt">
+          <property name="toolTip">
+           <string>Расшифровать текст и поместить его на вкладку &quot;нешифрованный текст&quot;</string>
+          </property>
           <property name="text">
            <string>Расшифровать</string>
           </property>
@@ -143,6 +161,9 @@
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QPushButton" name="pushButton_file_encrypt">
+            <property name="toolTip">
+             <string>Зашифровать файл</string>
+            </property>
             <property name="text">
              <string>Зашифровать</string>
             </property>
@@ -150,6 +171,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_file_decrypt">
+            <property name="toolTip">
+             <string>Расшифровать файл</string>
+            </property>
             <property name="text">
              <string>Расшифровать</string>
             </property>
@@ -168,9 +192,12 @@
           <property name="title">
            <string>Файлы</string>
           </property>
-          <layout class="QFormLayout" name="formLayout_2">
+          <layout class="QGridLayout" name="gridLayout">
            <item row="0" column="0">
             <widget class="QPushButton" name="pushButton_open_file_srs">
+             <property name="toolTip">
+              <string>Выбрать исходный файл</string>
+             </property>
              <property name="text">
               <string>Исходный файл</string>
              </property>
@@ -181,6 +208,9 @@
            </item>
            <item row="1" column="0">
             <widget class="QPushButton" name="pushButton_open_file_dst">
+             <property name="toolTip">
+              <string>Выбрать целевой файл</string>
+             </property>
              <property name="text">
               <string>Целевой файл</string>
              </property>
@@ -189,17 +219,23 @@
            <item row="1" column="1">
             <widget class="QLineEdit" name="lineEdit_file_dst"/>
            </item>
-           <item row="3" column="0">
-            <widget class="QPushButton" name="pushButton_reset">
+           <item row="2" column="0">
+            <widget class="QPushButton" name="pushButton_files_switch">
+             <property name="toolTip">
+              <string>Поменять файлы местами</string>
+             </property>
              <property name="text">
-              <string>Сброс</string>
+              <string>Поменять файлы</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QPushButton" name="pushButton_files_switch">
+           <item row="3" column="0">
+            <widget class="QPushButton" name="pushButton_reset">
+             <property name="toolTip">
+              <string>Сбросить названия файлов</string>
+             </property>
              <property name="text">
-              <string>Поменять файлы</string>
+              <string>Сброс</string>
              </property>
             </widget>
            </item>
@@ -279,6 +315,9 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="start_demo"/>
+   <addaction name="help"/>
+   <addaction name="exit"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="exit">
@@ -356,7 +395,7 @@
   </action>
   <action name="start_demo">
    <property name="text">
-    <string>Открыть</string>
+    <string>Открыть демонстрацию</string>
    </property>
   </action>
   <action name="help">

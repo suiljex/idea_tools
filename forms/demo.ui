@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
-    <height>1521</height>
+    <width>983</width>
+    <height>981</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -102,6 +102,11 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Monospace</family>
+       </font>
       </property>
       <property name="title">
        <string>Ключи раундов</string>
@@ -628,6 +633,11 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="font">
+       <font>
+        <family>Monospace</family>
+       </font>
+      </property>
       <property name="title">
        <string>Раунд</string>
       </property>
@@ -740,6 +750,11 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Monospace</family>
+       </font>
       </property>
       <property name="title">
        <string>Финальный раунд</string>
@@ -869,7 +884,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1024</width>
+     <width>983</width>
      <height>19</height>
     </rect>
    </property>
