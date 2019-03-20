@@ -280,19 +280,23 @@ void MainWindow::ProcessFile(std::ifstream &i_fin, std::ofstream &i_fout, bool i
   int file_size = i_fin.tellg();
   i_fin.seekg(0, std::ios_base::beg);
 
+  int temp_size_left;
+
   while (i_fin.tellg() < file_size)
   {
-    if ((file_size - i_fin.tellg()) >= 8)
+    temp_size_left = file_size - i_fin.tellg();
+
+    if (temp_size_left < 8)
     {
-      i_fin.read(reinterpret_cast<char*>(data_block_in), 8);
-    }
-    else if ((file_size - i_fin.tellg()) < 8)
-    {
-      i_fin.read(reinterpret_cast<char*>(data_block_in), (file_size - i_fin.tellg()));
-      for (unsigned int j = (file_size % 8) + 1; j < 8; ++j)
+      i_fin.read(reinterpret_cast<char*>(data_block_in), temp_size_left);
+      for (unsigned int j = temp_size_left; j < 8; ++j)
       {
         data_block_in[j] = 0x00;
       }
+    }
+    else
+    {
+      i_fin.read(reinterpret_cast<char*>(data_block_in), 8);
     }
 
     if (i_encrypt == true)
