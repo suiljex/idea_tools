@@ -11,11 +11,15 @@ Demo::Demo(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::Demo)
 {
+  //Регулярное выражение, описывающее последовательность из 0 и 1 длиной 128
   QRegExp reg_exp_key("^(1|0){128}$");
 
   ui->setupUi(this);
+
+  //Проверка ввода ключа на корректность
   ui->edit_key->setValidator(new QRegExpValidator(reg_exp_key, this));
 
+  //Генерация случайного ключа
   QString new_key;
   std::mt19937_64 rand_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
@@ -26,6 +30,7 @@ Demo::Demo(QWidget *parent) :
 
   ui->edit_key->setText(new_key);
 
+  //Выключение неиспользуемых элементов
   ui->pushButton_next->setEnabled(false);
   ui->pushButton_prev->setEnabled(false);
   ui->comboBox_stages->setEnabled(false);
@@ -39,6 +44,7 @@ Demo::Demo(QWidget *parent) :
   ui->groupBox_round_fin->setEnabled(false);
   ui->groupBox_round_fin->setVisible(false);
 
+  //Отображение информации об алгоритме
   ui->groupBox_placeholder->setEnabled(true);
   ui->groupBox_placeholder->setVisible(true);
 }
@@ -50,15 +56,18 @@ Demo::~Demo()
 
 void Demo::on_pushButton_start_clicked()
 {
+  //Начать демонстрацию
   QString new_key(ui->edit_key->text());
   QString block_str(ui->edit_data->text());
 
+  //Проверка длины ключа
   if (new_key.length() != 128)
   {
     ui->statusbar->showMessage("Короткий ключ", STATUS_BAR_TIMEOUT);
     return;
   }
 
+  //Проверка длины блока
   if (block_str.length() > 8)
   {
     ui->statusbar->showMessage("Слишком длинный блок", STATUS_BAR_TIMEOUT);
@@ -80,17 +89,20 @@ void Demo::on_pushButton_start_clicked()
   uint8_t block_plain[8];
   uint8_t block_cipher[8];
 
+  //Копирование данных в массив для шифрования
   const char* temp_data = block_str.toStdString().c_str();
   unsigned int i, j;
   for (i = 0; i < strlen(temp_data) && i < 8; ++i)
   {
     block_plain[i] = temp_data[i];
   }
+  //Заполнение оставшегося массива нулями
   for (j = i; j < 8; ++j)
   {
     block_plain[j] = 0x00;
   }
 
+  //Получение данных о раундах шифрования
   IdeaDemoInit(&idea_ctx, key_data, 16);
   rounds_data_encryption = IdeaDemoEncryptBlock(&idea_ctx, block_plain, block_cipher);
   rounds_data_decryption = IdeaDemoDecryptBlock(&idea_ctx, block_cipher, block_plain);
@@ -121,6 +133,7 @@ void Demo::on_pushButton_start_clicked()
   ui->groupBox_placeholder->setEnabled(false);
   ui->groupBox_placeholder->setVisible(false);
 
+  //Включение нужных элементов
   ui->pushButton_next->setEnabled(true);
   ui->pushButton_prev->setEnabled(true);
   ui->comboBox_stages->setEnabled(true);

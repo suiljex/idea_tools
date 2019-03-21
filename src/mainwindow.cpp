@@ -16,9 +16,12 @@ MainWindow::MainWindow(QWidget *parent) :
   ui(new Ui::MainWindow),
   key_applied(false)
 {
+  //Регулярное выражение, описывающее последовательность из 0 и 1 длиной 128
   QRegExp reg_exp_key("^(1|0){128}$");
 
   ui->setupUi(this);
+
+  //Проверка ввода ключа на корректность
   ui->key_input->setValidator(new QRegExpValidator(reg_exp_key, this));
 }
 
@@ -29,6 +32,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_genkey_clicked()
 {
+  //Генерация случайного ключа
   QString new_key;
   std::mt19937_64 rand_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
@@ -44,6 +48,7 @@ void MainWindow::on_pushButton_applykey_clicked()
 {
   QString new_key(ui->key_input->text());
 
+  //Проверка длины ключа
   if (new_key.length() == 128)
   {
     bool success_conversion;
@@ -72,6 +77,7 @@ void MainWindow::on_pushButton_applykey_clicked()
 
 void MainWindow::on_key_input_textChanged(const QString &/*arg1*/)
 {
+  //При изменении текста в строке появляется возможность применения текста
   ui->pushButton_applykey->setEnabled(true);
 }
 
@@ -105,6 +111,8 @@ void MainWindow::on_pushButton_text_decrypt_clicked()
     return;
   }
 
+  //Проверка на корректность ввода.
+  //Входной текст должен быть закодирован в base64
   QRegExp reg_exp_key("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$");
   QRegExpValidator input_check(reg_exp_key, this);
   QString temp_input_string(ui->plainTextEdit_encrypted->toPlainText());
@@ -223,10 +231,13 @@ void MainWindow::ProcessText(QByteArray &i_data, QByteArray &o_data, bool i_encr
   uint8_t data_block_in[8] = {0};
   uint8_t data_block_out[8] = {0};
 
+  //Пока не закончатся данные
   for (int i = 0; i < i_data.length(); ++i)
   {
+    //Копирование данных в массив для шифрования
     data_block_in[i % 8] = i_data[i];
 
+    //Если массив заполнился
     if (i % 8 == 7)
     {
       if (i_encrypt == true)
@@ -238,13 +249,16 @@ void MainWindow::ProcessText(QByteArray &i_data, QByteArray &o_data, bool i_encr
         IdeaDecryptBlock(&idea_ctx, data_block_in, data_block_out);
       }
 
+      //Данные дописываются в конец выходного массива
       for (int k = 0; k < 8; ++k)
       {
         o_data.append(data_block_out[k]);
       }
     }
+    //Если дошли до конца
     else if (i == i_data.length() - 1)
     {
+      //Заполнить конец входного массива нулями
       for (unsigned int j = (i % 8) + 1; j < 8; ++j)
       {
         data_block_in[j] = 0x00;
@@ -259,6 +273,7 @@ void MainWindow::ProcessText(QByteArray &i_data, QByteArray &o_data, bool i_encr
         IdeaDecryptBlock(&idea_ctx, data_block_in, data_block_out);
       }
 
+      //Данные дописываются в конец выходного массива
       for (int k = 0; k < 8; ++k)
       {
         o_data.append(data_block_out[k]);
@@ -276,10 +291,13 @@ void MainWindow::ProcessFile(QFile &i_fin, QFile &i_fout, bool i_encrypt)
 
   int temp_size_left;
 
+  //Пока не дошли до конца файла
   while (i_fin.atEnd() == false)
   {
+    //Вычисление оставшегося размера
     temp_size_left = file_size - i_fin.pos();
 
+    //Если массив заполняется не полностью, в конец дописывабтся нули
     if (temp_size_left < 8)
     {
       i_fin.read(reinterpret_cast<char*>(data_block_in), temp_size_left);

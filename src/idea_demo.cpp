@@ -57,23 +57,19 @@ unsigned int IdeaDemoInit(IdeaDemoContext *context, const uint8_t *key, size_t k
   uint16_t *ek;
   uint16_t *dk;
 
-  //Invalid key length?
   if(keyLen != 16)
   {
     return 1;
   }
 
-  //Point to the encryption and decryption subkeys
   ek = context->keys_encryption;
   dk = context->keys_decryption;
 
-  //First, the 128-bit key is partitioned into eight 16-bit sub-blocks
   for(i = 0; i < 8; i++)
   {
     ek[i] = LOAD16BE(key + i * 2);
   }
 
-  //Expand encryption subkeys
   for(i = 8; i < 52; i++)
   {
     if((i % 8) == 6)
@@ -90,7 +86,6 @@ unsigned int IdeaDemoInit(IdeaDemoContext *context, const uint8_t *key, size_t k
     }
   }
 
-  //Generate subkeys for decryption
   for(i = 0; i < 52; i += 6)
   {
     dk[i] = IdeaDemoInv(ek[48 - i]);
@@ -115,7 +110,6 @@ unsigned int IdeaDemoInit(IdeaDemoContext *context, const uint8_t *key, size_t k
     }
   }
 
-  //No error to report
   return 0;
 }
 
@@ -129,16 +123,13 @@ std::vector<IdeaDemoRoundData> IdeaDemoEncryptBlock(IdeaDemoContext *context, co
   uint16_t f;
   uint16_t *k;
 
-  //The plaintext is divided into four 16-bit registers
   uint16_t a = LOAD16BE(input + 0);
   uint16_t b = LOAD16BE(input + 2);
   uint16_t c = LOAD16BE(input + 4);
   uint16_t d = LOAD16BE(input + 6);
 
-  //Point to the key schedule
   k = context->keys_encryption;
 
-  //The process consists of eight identical encryption steps
   for(i = 0; i < 8; i++)
   {
     temp_round_data.round_number = i;
@@ -155,7 +146,6 @@ std::vector<IdeaDemoRoundData> IdeaDemoEncryptBlock(IdeaDemoContext *context, co
     temp_round_data.keys_used[4] = k[4];
     temp_round_data.keys_used[5] = k[5];
 
-    //Apply a round
     a = IdeaDemoMul(a, k[0]);
     temp_round_data.inner_data[0] = a;
     b += k[1];
@@ -191,7 +181,6 @@ std::vector<IdeaDemoRoundData> IdeaDemoEncryptBlock(IdeaDemoContext *context, co
     b = f;
     c = e;
 
-    //Advance current location in key schedule
     k += 6;
 
     ret_rounds_data.push_back(temp_round_data);
@@ -211,8 +200,6 @@ std::vector<IdeaDemoRoundData> IdeaDemoEncryptBlock(IdeaDemoContext *context, co
   temp_round_data.keys_used[4] = 0x0000;
   temp_round_data.keys_used[5] = 0x0000;
 
-  //The four 16-bit values produced at the end of the 8th encryption
-  //round are combined with the last four of the 52 key sub-blocks
   a = IdeaDemoMul(a, k[0]);
   temp_round_data.inner_data[0] = a;
   c += k[1];
@@ -235,7 +222,6 @@ std::vector<IdeaDemoRoundData> IdeaDemoEncryptBlock(IdeaDemoContext *context, co
 
   ret_rounds_data.push_back(temp_round_data);
 
-  //The resulting value is the ciphertext
   STORE16BE(a, output + 0);
   STORE16BE(c, output + 2);
   STORE16BE(b, output + 4);
@@ -254,16 +240,13 @@ std::vector<IdeaDemoRoundData> IdeaDemoDecryptBlock(IdeaDemoContext *context, co
   uint16_t f;
   uint16_t *k;
 
-  //The plaintext is divided into four 16-bit registers
   uint16_t a = LOAD16BE(input + 0);
   uint16_t b = LOAD16BE(input + 2);
   uint16_t c = LOAD16BE(input + 4);
   uint16_t d = LOAD16BE(input + 6);
 
-  //Point to the key schedule
   k = context->keys_decryption;
 
-  //The process consists of eight identical encryption steps
   for(i = 0; i < 8; i++)
   {
     temp_round_data.round_number = i;
@@ -280,7 +263,6 @@ std::vector<IdeaDemoRoundData> IdeaDemoDecryptBlock(IdeaDemoContext *context, co
     temp_round_data.keys_used[4] = k[4];
     temp_round_data.keys_used[5] = k[5];
 
-    //Apply a round
     a = IdeaDemoMul(a, k[0]);
     temp_round_data.inner_data[0] = a;
     b += k[1];
@@ -316,7 +298,6 @@ std::vector<IdeaDemoRoundData> IdeaDemoDecryptBlock(IdeaDemoContext *context, co
     b = f;
     c = e;
 
-    //Advance current location in key schedule
     k += 6;
 
     ret_rounds_data.push_back(temp_round_data);
@@ -336,8 +317,6 @@ std::vector<IdeaDemoRoundData> IdeaDemoDecryptBlock(IdeaDemoContext *context, co
   temp_round_data.keys_used[4] = 0x0000;
   temp_round_data.keys_used[5] = 0x0000;
 
-  //The four 16-bit values produced at the end of the 8th encryption
-  //round are combined with the last four of the 52 key sub-blocks
   a = IdeaDemoMul(a, k[0]);
   temp_round_data.inner_data[0] = a;
   c += k[1];
@@ -360,7 +339,6 @@ std::vector<IdeaDemoRoundData> IdeaDemoDecryptBlock(IdeaDemoContext *context, co
 
   ret_rounds_data.push_back(temp_round_data);
 
-  //The resulting value is the ciphertext
   STORE16BE(a, output + 0);
   STORE16BE(c, output + 2);
   STORE16BE(b, output + 4);

@@ -57,23 +57,23 @@ unsigned int IdeaInit(IdeaContext *context, const uint8_t *key, size_t keyLen)
   uint16_t *ek;
   uint16_t *dk;
 
-  //Invalid key length?
+  //Проверка длины ключа
   if(keyLen != 16)
   {
     return 1;
   }
 
-  //Point to the encryption and decryption subkeys
+  //Получение указателей на ключи раундов
   ek = context->keys_encryption;
   dk = context->keys_decryption;
 
-  //First, the 128-bit key is partitioned into eight 16-bit sub-blocks
+  //Деление 128 битного ключа на блоки по 16 бит
   for(i = 0; i < 8; i++)
   {
     ek[i] = LOAD16BE(key + i * 2);
   }
 
-  //Expand encryption subkeys
+  //Получение ключей раундов для шифрования
   for(i = 8; i < 52; i++)
   {
     if((i % 8) == 6)
@@ -90,7 +90,7 @@ unsigned int IdeaInit(IdeaContext *context, const uint8_t *key, size_t keyLen)
     }
   }
 
-  //Generate subkeys for decryption
+  //Получение ключей раундов для дешифрования
   for(i = 0; i < 52; i += 6)
   {
     dk[i] = IdeaInv(ek[48 - i]);
@@ -115,7 +115,7 @@ unsigned int IdeaInit(IdeaContext *context, const uint8_t *key, size_t keyLen)
     }
   }
 
-  //No error to report
+  //Успешное завершение
   return 0;
 }
 
@@ -126,19 +126,19 @@ void IdeaEncryptBlock(IdeaContext *context, const uint8_t *input, uint8_t *outpu
   uint16_t f;
   uint16_t *k;
 
-  //The plaintext is divided into four 16-bit registers
+  //Текст делится на четыре 16 битные части
   uint16_t a = LOAD16BE(input + 0);
   uint16_t b = LOAD16BE(input + 2);
   uint16_t c = LOAD16BE(input + 4);
   uint16_t d = LOAD16BE(input + 6);
 
-  //Point to the key schedule
+  //Указатель на ключи раундов шифрования
   k = context->keys_encryption;
 
-  //The process consists of eight identical encryption steps
+  //Процесс шифрования состоит из 8 одинаковых частей
   for(i = 0; i < 8; i++)
   {
-    //Apply a round
+    //Провести раунд
     a = IdeaMul(a, k[0]);
     b += k[1];
     c += k[2];
@@ -160,18 +160,17 @@ void IdeaEncryptBlock(IdeaContext *context, const uint8_t *input, uint8_t *outpu
     b = f;
     c = e;
 
-    //Advance current location in key schedule
+    //Продвижение по списку ключей
     k += 6;
   }
 
-  //The four 16-bit values produced at the end of the 8th encryption
-  //round are combined with the last four of the 52 key sub-blocks
+  //Четыре 16 битных значения комбинируются с последними 4 ключами
   a = IdeaMul(a, k[0]);
   c += k[1];
   b += k[2];
   d = IdeaMul(d, k[3]);
 
-  //The resulting value is the ciphertext
+  //Полученное значение является шифрованным текстом
   STORE16BE(a, output + 0);
   STORE16BE(c, output + 2);
   STORE16BE(b, output + 4);
@@ -185,20 +184,19 @@ void IdeaDecryptBlock(IdeaContext *context, const uint8_t *input, uint8_t *outpu
   uint16_t f;
   uint16_t *k;
 
-  //The ciphertext is divided into four 16-bit registers
+  //Текст делится на четыре 16 битные части
   uint16_t a = LOAD16BE(input + 0);
   uint16_t b = LOAD16BE(input + 2);
   uint16_t c = LOAD16BE(input + 4);
   uint16_t d = LOAD16BE(input + 6);
 
-  //Point to the key schedule
+  //Указатель на ключи раундов дешифрования
   k = context->keys_decryption;
 
-  //The computational process used for decryption of the ciphertext is
-  //essentially the same as that used for encryption of the plaintext
+  //Процесс шифрования состоит из 8 одинаковых частей
   for(i = 0; i < 8; i++)
   {
-    //Apply a round
+    //Провести раунд
     a = IdeaMul(a, k[0]);
     b += k[1];
     c += k[2];
@@ -220,18 +218,17 @@ void IdeaDecryptBlock(IdeaContext *context, const uint8_t *input, uint8_t *outpu
     b = f;
     c = e;
 
-    //Advance current location in key schedule
+    //Продвижение по списку ключей
     k += 6;
   }
 
-  //The four 16-bit values produced at the end of the 8th encryption
-  //round are combined with the last four of the 52 key sub-blocks
+  //Четыре 16 битных значения комбинируются с последними 4 ключами
   a = IdeaMul(a, k[0]);
   c += k[1];
   b += k[2];
   d = IdeaMul(d, k[3]);
 
-  //The resulting value is the plaintext
+  //Полученное значение является дешифрованным текстом
   STORE16BE(a, output + 0);
   STORE16BE(c, output + 2);
   STORE16BE(b, output + 4);
