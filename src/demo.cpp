@@ -42,6 +42,8 @@ Demo::Demo(QWidget *parent) :
   ui->comboBox_base_data->addItem("16");
   ui->comboBox_base_data->addItem("T");
   ui->comboBox_base_data->setCurrentIndex(2);
+
+  this->resize(840,420);
 }
 
 Demo::~Demo()
@@ -90,7 +92,7 @@ void Demo::on_pushButton_start_clicked()
   current_index = 0;
 
   //Копирование данных в массив для шифрования
-  if (base_data == 2)
+  if (base_data == 2 && block_str.length() == 64)
   {
     for (auto it = block_str.begin(); it != block_str.end(); it += 8)
     {
@@ -99,7 +101,7 @@ void Demo::on_pushButton_start_clicked()
       ++current_index;
     }
   }
-  else if (base_data == 16)
+  else if (base_data == 16 && block_str.length() == 16)
   {
     for (auto it = block_str.begin(); it != block_str.end(); it += 2)
     {
@@ -116,6 +118,11 @@ void Demo::on_pushButton_start_clicked()
     {
       block_plain[i] = temp_data[i];
     }
+  }
+  else
+  {
+    ui->statusbar->showMessage("Слишком короткий блок", STATUS_BAR_TIMEOUT);
+    return;
   }
 
   //Получение данных о раундах шифрования
