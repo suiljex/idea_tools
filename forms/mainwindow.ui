@@ -75,7 +75,13 @@
         </layout>
        </item>
        <item>
-        <widget class="QLineEdit" name="key_input"/>
+        <widget class="QLineEdit" name="key_input">
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox">
