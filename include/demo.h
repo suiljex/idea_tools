@@ -26,6 +26,12 @@ private slots:
 
   void on_comboBox_stages_currentIndexChanged(int index);
 
+  void on_comboBox_base_data_currentIndexChanged(int index);
+
+  void on_comboBox_base_key_currentIndexChanged(int index);
+
+  void on_pushButton_genkey_clicked();
+
 private:
 
   void FillInfoKeysEnc(const uint16_t i_keys[52]);
@@ -46,6 +52,9 @@ private:
   QString key_string;
   uint8_t key_data[16];
   IdeaDemoContext idea_ctx;
+
+  unsigned int base_number;
+  unsigned int base_data;
 
   std::vector<IdeaDemoRoundData> rounds_data_encryption;
   std::vector<IdeaDemoRoundData> rounds_data_decryption;

@@ -14,15 +14,14 @@
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
+  base_key(2),
   key_applied(false)
 {
-  //Регулярное выражение, описывающее последовательность из 0 и 1 длиной 128
-  QRegExp reg_exp_key("^(1|0){128}$");
-
   ui->setupUi(this);
 
-  //Проверка ввода ключа на корректность
-  ui->key_input->setValidator(new QRegExpValidator(reg_exp_key, this));
+  ui->comboBox_base_key->addItem("2");
+  ui->comboBox_base_key->addItem("16");
+  ui->comboBox_base_key->setCurrentIndex(1);
 }
 
 MainWindow::~MainWindow()
@@ -36,9 +35,19 @@ void MainWindow::on_pushButton_genkey_clicked()
   QString new_key;
   std::mt19937_64 rand_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
-  for (int i = 0; i < 128; ++i)
+  if (base_key == 2)
   {
-    new_key += QString::number(rand_engine() % 2);
+    for (int i = 0; i < 128; ++i)
+    {
+      new_key += QString::number(rand_engine() % 2, base_key);
+    }
+  }
+  else if(base_key == 16)
+  {
+    for (int i = 0; i < 32; ++i)
+    {
+      new_key += QString::number(rand_engine() % 16, base_key);
+    }
   }
 
   ui->key_input->setText(new_key);
@@ -48,31 +57,41 @@ void MainWindow::on_pushButton_applykey_clicked()
 {
   QString new_key(ui->key_input->text());
 
+  bool success_conversion;
+  int current_index = 0;
+
+  key_string = new_key;
+
   //Проверка длины ключа
-  if (new_key.length() == 128)
+  if (base_key == 2 && new_key.length() == 128)
   {
-    bool success_conversion;
-    int current_index = 0;
-
-    key_string = new_key;
-
     for (auto it = key_string.begin(); it != key_string.end(); it += 8)
     {
       QString temp_text_part(it, 8);
-      key_data[current_index] = temp_text_part.toInt(&success_conversion, 2);
+      key_data[current_index] = temp_text_part.toInt(&success_conversion, base_key);
       ++current_index;
     }
-
-    IdeaInit(&idea_ctx, key_data, 16);
-
-    ui->pushButton_applykey->setEnabled(false);
-    key_applied = true;
-    ui->statusBar->showMessage("Ключ принят", STATUS_BAR_TIMEOUT);
+  }
+  else if(base_key == 16 && new_key.length() == 32)
+  {
+    for (auto it = key_string.begin(); it != key_string.end(); it += 2)
+    {
+      QString temp_text_part(it, 2);
+      key_data[current_index] = temp_text_part.toInt(&success_conversion, base_key);
+      ++current_index;
+    }
   }
   else
   {
     ui->statusBar->showMessage("Короткий ключ", STATUS_BAR_TIMEOUT);
+    return;
   }
+
+  IdeaInit(&idea_ctx, key_data, 16);
+
+  ui->pushButton_applykey->setEnabled(false);
+  key_applied = true;
+  ui->statusBar->showMessage("Ключ принят", STATUS_BAR_TIMEOUT);
 }
 
 void MainWindow::on_key_input_textChanged(const QString &/*arg1*/)
@@ -342,25 +361,31 @@ void MainWindow::on_pushButton_key_load_clicked()
     return;
   }
 
-  QRegExp reg_exp_key("^(1|0){128}$");
-  QRegExpValidator input_check(reg_exp_key, this);
-
   int file_size = fin.size();
-
-  std::vector<char> temp_key_data(file_size, 0);
-  fin.read(temp_key_data.data(), file_size);
-  fin.close();
-
-  QString temp_key_string(QString::fromStdString(std::string(temp_key_data.begin(), temp_key_data.end())));
-  int temp_pos = 0;
-
-  if (input_check.validate(temp_key_string, temp_pos) != QValidator::Acceptable)
+  if(file_size != 16)
   {
     ui->statusBar->showMessage("Некорректное содержимое ключевого файла", STATUS_BAR_TIMEOUT);
     return;
   }
 
-  ui->key_input->setText((temp_key_string));
+  fin.read(reinterpret_cast<char*>(key_data), file_size);
+  fin.close();
+
+  QString new_key;
+
+  for (int i = 0; i < 16; ++i)
+  {
+    if (base_key == 2)
+    {
+      new_key += QString("%1").arg(key_data[i], 8, base_key, QChar('0'));
+    }
+    else if(base_key == 16)
+    {
+      new_key += QString("%1").arg(key_data[i], 2, base_key, QChar('0'));
+    }
+  }
+
+  ui->key_input->setText(new_key);
 
   ui->statusBar->showMessage("Ключ успешно загружен", STATUS_BAR_TIMEOUT);
 }
@@ -376,9 +401,7 @@ void MainWindow::on_pushButton_key_save_clicked()
     return;
   }
 
-  std::string temp_key_str(ui->key_input->text().toStdString());
-
-  fout.write(temp_key_str.c_str(), temp_key_str.size());
+  fout.write(reinterpret_cast<char*>(key_data), 16);
 
   fout.close();
 
@@ -401,4 +424,29 @@ void MainWindow::on_about_triggered()
 {
   form_about = new About(this);
   form_about->show();
+}
+
+void MainWindow::on_comboBox_base_key_currentIndexChanged(int index)
+{
+  QRegExp reg_exp_key;
+
+  ui->key_input->clear();
+
+  if (index == 0)
+  {
+    //Регулярное выражение, описывающее последовательность из 0 и 1 длиной 128
+    reg_exp_key.setPattern("^[0-1]{128}$");
+
+    base_key = 2;
+  }
+  else if (index == 1)
+  {
+    //Регулярное выражение, описывающее последовательность из 0 - F длиной 32
+    reg_exp_key.setPattern("^[0-9a-fA-F]{32}$");
+
+    base_key = 16;
+  }
+
+  //Проверка ввода ключа на корректность
+  ui->key_input->setValidator(new QRegExpValidator(reg_exp_key, this));
 }

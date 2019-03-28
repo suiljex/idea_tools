@@ -64,12 +64,16 @@ private slots:
 
   void on_about_triggered();
 
+  void on_comboBox_base_key_currentIndexChanged(int index);
+
 private:
   Ui::MainWindow *ui;
 
   Demo *form_demo;
   About *form_about;
   Help* form_help;
+
+  unsigned int base_key;
 
   bool key_applied;
   QString key_string;
