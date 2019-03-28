@@ -42,6 +42,11 @@
           </item>
           <item>
            <widget class="QLineEdit" name="edit_data">
+            <property name="font">
+             <font>
+              <family>Monospace</family>
+             </font>
+            </property>
             <property name="text">
              <string>#suiljex</string>
             </property>
@@ -94,7 +99,13 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="edit_key"/>
+           <widget class="QLineEdit" name="edit_key">
+            <property name="font">
+             <font>
+              <family>Monospace</family>
+             </font>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_base_key">
