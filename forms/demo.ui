@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>983</width>
-    <height>981</height>
+    <width>986</width>
+    <height>1121</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -864,6 +864,62 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="round_fin_d1">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="round_fin_d2">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="round_fin_d3">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="round_fin_d4">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="round_fin_d5">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="round_fin_d6">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="round_fin_d7">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="round_fin_d8">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -960,7 +1016,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>983</width>
+     <width>986</width>
      <height>19</height>
     </rect>
    </property>
