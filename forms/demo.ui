@@ -50,6 +50,9 @@
             <property name="text">
              <string>#suiljex</string>
             </property>
+            <property name="placeholderText">
+             <string>блок данных (8 байт)</string>
+            </property>
            </widget>
           </item>
           <item>
@@ -104,6 +107,9 @@
              <font>
               <family>Monospace</family>
              </font>
+            </property>
+            <property name="placeholderText">
+             <string>ключ</string>
             </property>
            </widget>
           </item>
