@@ -81,6 +81,9 @@
            <family>Monospace</family>
           </font>
          </property>
+         <property name="placeholderText">
+          <string>ключ</string>
+         </property>
         </widget>
        </item>
        <item>
@@ -92,7 +95,11 @@
           <item>
            <layout class="QGridLayout" name="gridLayout_2">
             <item row="1" column="1">
-             <widget class="QLineEdit" name="lineEdit_key_file"/>
+             <widget class="QLineEdit" name="lineEdit_key_file">
+              <property name="placeholderText">
+               <string>путь до ключевого файла</string>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QPushButton" name="pushButton_key_choose">
@@ -157,7 +164,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="plainTextEdit_decrypted"/>
+         <widget class="QPlainTextEdit" name="plainTextEdit_decrypted">
+          <property name="placeholderText">
+           <string>Нешифрованный текст</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -204,7 +215,11 @@
          </layout>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="plainTextEdit_encrypted"/>
+         <widget class="QPlainTextEdit" name="plainTextEdit_encrypted">
+          <property name="placeholderText">
+           <string>Зашифрованный текст</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -260,7 +275,11 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLineEdit" name="lineEdit_file_src"/>
+            <widget class="QLineEdit" name="lineEdit_file_src">
+             <property name="placeholderText">
+              <string>путь до исходного файла</string>
+             </property>
+            </widget>
            </item>
            <item row="1" column="0">
             <widget class="QPushButton" name="pushButton_open_file_dst">
@@ -273,7 +292,11 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QLineEdit" name="lineEdit_file_dst"/>
+            <widget class="QLineEdit" name="lineEdit_file_dst">
+             <property name="placeholderText">
+              <string>путь до целевого файла </string>
+             </property>
+            </widget>
            </item>
            <item row="2" column="0">
             <widget class="QPushButton" name="pushButton_files_switch">
