@@ -14,6 +14,7 @@
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
+  base_cryptotext(-1),
   base_key(2),
   key_applied(false)
 {
@@ -22,6 +23,10 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->comboBox_base_key->addItem("2");
   ui->comboBox_base_key->addItem("16");
   ui->comboBox_base_key->setCurrentIndex(1);
+
+  ui->comboBox_base_crypt->addItem("base64");
+  ui->comboBox_base_crypt->addItem("hex");
+  ui->comboBox_base_crypt->setCurrentIndex(0);
 }
 
 MainWindow::~MainWindow()
@@ -118,7 +123,15 @@ void MainWindow::on_pushButton_text_encrypt_clicked()
 
   ProcessText(input_data, output_data, true);
 
-  ui->plainTextEdit_encrypted->setPlainText(output_data.toBase64());
+  if (base_cryptotext == 16)
+  {
+    ui->plainTextEdit_encrypted->setPlainText(output_data.toHex());
+  }
+  else if (base_cryptotext == 0)
+  {
+    ui->plainTextEdit_encrypted->setPlainText(output_data.toBase64());
+  }
+
   ui->statusBar->showMessage("Успешно зашифровано", STATUS_BAR_TIMEOUT);
 }
 
@@ -131,9 +144,8 @@ void MainWindow::on_pushButton_text_decrypt_clicked()
   }
 
   //Проверка на корректность ввода.
-  //Входной текст должен быть закодирован в base64
-  QRegExp reg_exp_key("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$");
-  QRegExpValidator input_check(reg_exp_key, this);
+  //Входной текст должен быть закодирован в корректной кодировке
+  QRegExpValidator input_check(reg_exp_crypt, this);
   QString temp_input_string(ui->plainTextEdit_encrypted->toPlainText());
   int temp_pos = 0;
 
@@ -143,8 +155,17 @@ void MainWindow::on_pushButton_text_decrypt_clicked()
     return;
   }
 
-  QByteArray input_data(QByteArray::fromBase64(temp_input_string.toUtf8()));
+  QByteArray input_data;
   QByteArray output_data;
+
+  if (base_cryptotext == 16)
+  {
+    input_data = QByteArray::fromHex(temp_input_string.toUtf8());
+  }
+  else if (base_cryptotext == 0)
+  {
+    input_data = QByteArray::fromBase64(temp_input_string.toUtf8());
+  }
 
   ProcessText(input_data, output_data, false);
 
@@ -436,17 +457,31 @@ void MainWindow::on_comboBox_base_key_currentIndexChanged(int index)
   {
     //Регулярное выражение, описывающее последовательность из 0 и 1 длиной 128
     reg_exp_key.setPattern("^[0-1]{128}$");
-
     base_key = 2;
   }
   else if (index == 1)
   {
     //Регулярное выражение, описывающее последовательность из 0 - F длиной 32
     reg_exp_key.setPattern("^[0-9a-fA-F]{32}$");
-
     base_key = 16;
   }
 
   //Проверка ввода ключа на корректность
   ui->key_input->setValidator(new QRegExpValidator(reg_exp_key, this));
+}
+
+void MainWindow::on_comboBox_base_crypt_currentIndexChanged(int index)
+{
+  if (index == 0)
+  {
+    //Регулярное выражение, описывающее base64 строку
+    reg_exp_crypt.setPattern("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$");
+    base_cryptotext = 0;
+  }
+  else if (index == 1)
+  {
+    //Регулярное выражение, описывающее последовательность из 0 - F длиной 8
+    reg_exp_crypt.setPattern("^([0-9a-fA-F]{16})+$");
+    base_cryptotext = 16;
+  }
 }

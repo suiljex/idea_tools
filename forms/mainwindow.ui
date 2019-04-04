@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>514</width>
-    <height>513</height>
+    <width>522</width>
+    <height>534</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -167,14 +167,41 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <widget class="QPushButton" name="pushButton_text_decrypt">
-          <property name="toolTip">
-           <string>Расшифровать текст и поместить его на вкладку &quot;нешифрованный текст&quot;</string>
-          </property>
-          <property name="text">
-           <string>Расшифровать</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QPushButton" name="pushButton_text_decrypt">
+            <property name="toolTip">
+             <string>Расшифровать текст и поместить его на вкладку &quot;нешифрованный текст&quot;</string>
+            </property>
+            <property name="text">
+             <string>Расшифровать</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_base">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Представление:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_base_crypt">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QPlainTextEdit" name="plainTextEdit_encrypted"/>
@@ -282,7 +309,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>514</width>
+     <width>522</width>
      <height>19</height>
     </rect>
    </property>
