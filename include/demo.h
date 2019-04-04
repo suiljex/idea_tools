@@ -50,7 +50,10 @@ private:
 
   bool key_applied;
   QString key_string;
+  QString block_string;
   uint8_t key_data[16];
+  uint8_t block_data[8];
+  uint8_t cipher_data[8];
   IdeaDemoContext idea_ctx;
 
   unsigned int base_number;

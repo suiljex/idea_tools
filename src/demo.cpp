@@ -61,6 +61,7 @@ void Demo::on_pushButton_start_clicked()
   int current_index = 0;
 
   key_string = new_key;
+  block_string = block_str;
 
   //Проверка длины ключа
   if (base_number == 2 && new_key.length() == 128)
@@ -112,9 +113,9 @@ void Demo::on_pushButton_start_clicked()
   }
   else if (base_data == 0)
   {
-    const char* temp_data = block_str.toStdString().c_str();
-    unsigned int i;
-    for (i = 0; i < strlen(temp_data) && i < 8; ++i)
+    QByteArray temp_data(block_str.toUtf8());
+    int i;
+    for (i = 0; i < temp_data.length() && i < 8; ++i)
     {
       block_plain[i] = temp_data[i];
     }
@@ -129,6 +130,9 @@ void Demo::on_pushButton_start_clicked()
   IdeaDemoInit(&idea_ctx, key_data, 16);
   rounds_data_encryption = IdeaDemoEncryptBlock(&idea_ctx, block_plain, block_cipher);
   rounds_data_decryption = IdeaDemoDecryptBlock(&idea_ctx, block_cipher, block_plain);
+
+  memcpy(block_data, block_plain, 8);
+  memcpy(cipher_data, block_cipher, 8);
 
   ui->comboBox_stages->addItem("Генерация Ключей раундов шифрования");
   ui->comboBox_stages->addItem("Раунд шифрования 1");
@@ -627,6 +631,63 @@ void Demo::FillInfoRoundFinEnc(IdeaDemoRoundData i_round_data)
       + " * " + QString::number(i_round_data.keys_used[3], base_number)
       + " = " + QString::number(i_round_data.inner_data[3], base_number);
   ui->round_fin_4 ->setText(temp_text);
+
+  //Информация о конечном преобразовании
+  temp_text = "Входные данные: "
+      + QString::number(block_data[0], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[0]+") ";}
+  temp_text += " Выходные данные: "
+      + QString::number(cipher_data[0], base_number);
+  ui->round_fin_d1->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(block_data[1], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[1]+") ";}
+  temp_text += " Выходные данные: "
+      + QString::number(cipher_data[1], base_number);
+  ui->round_fin_d2->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(block_data[2], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[2]+") ";}
+  temp_text += " Выходные данные: "
+      + QString::number(cipher_data[2], base_number);
+  ui->round_fin_d3->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(block_data[3], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[3]+") ";}
+  temp_text += " Выходные данные: "
+      + QString::number(cipher_data[3], base_number);
+  ui->round_fin_d4->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(block_data[4], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[4]+") ";}
+  temp_text += " Выходные данные: "
+      + QString::number(cipher_data[4], base_number);
+  ui->round_fin_d5->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(block_data[5], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[5]+") ";}
+  temp_text += " Выходные данные: "
+      + QString::number(cipher_data[5], base_number);
+  ui->round_fin_d6->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(block_data[6], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[6]+") ";}
+  temp_text += " Выходные данные: "
+      + QString::number(cipher_data[6], base_number);
+  ui->round_fin_d7->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(block_data[7], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[7]+") ";}
+  temp_text += " Выходные данные: "
+      + QString::number(cipher_data[7], base_number);
+  ui->round_fin_d8->setText(temp_text);
 }
 
 void Demo::FillInfoRoundFinDec(IdeaDemoRoundData i_round_data)
@@ -660,6 +721,63 @@ void Demo::FillInfoRoundFinDec(IdeaDemoRoundData i_round_data)
       + " * " + QString::number(i_round_data.keys_used[3], base_number)
       + " = " + QString::number(i_round_data.inner_data[3], base_number);
   ui->round_fin_4 ->setText(temp_text);
+
+  //Информация о конечном преобразовании
+  temp_text = "Входные данные: "
+      + QString::number(cipher_data[0], base_number);
+  temp_text += " Выходные данные: "
+      + QString::number(block_data[0], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[0]+") ";}
+  ui->round_fin_d1->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(cipher_data[1], base_number);
+  temp_text += " Выходные данные: "
+      + QString::number(block_data[1], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[1]+") ";}
+  ui->round_fin_d2->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(cipher_data[2], base_number);
+  temp_text += " Выходные данные: "
+      + QString::number(block_data[2], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[2]+") ";}
+  ui->round_fin_d3->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(cipher_data[3], base_number);
+  temp_text += " Выходные данные: "
+      + QString::number(block_data[3], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[3]+") ";}
+  ui->round_fin_d4->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(cipher_data[4], base_number);
+  temp_text += " Выходные данные: "
+      + QString::number(block_data[4], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[4]+") ";}
+  ui->round_fin_d5->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(cipher_data[5], base_number);
+  temp_text += " Выходные данные: "
+      + QString::number(block_data[5], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[5]+") ";}
+  ui->round_fin_d6->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(cipher_data[6], base_number);
+  temp_text += " Выходные данные: "
+      + QString::number(block_data[6], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[6]+") ";}
+  ui->round_fin_d7->setText(temp_text);
+
+  temp_text = "Входные данные: "
+      + QString::number(cipher_data[7], base_number);
+  temp_text += " Выходные данные: "
+      + QString::number(block_data[7], base_number);
+  if (base_data == 0){temp_text+=" ("+block_string[7]+") ";}
+  ui->round_fin_d8->setText(temp_text);
 }
 
 void Demo::on_comboBox_base_data_currentIndexChanged(int index)
@@ -685,7 +803,7 @@ void Demo::on_comboBox_base_data_currentIndexChanged(int index)
   else if (index == 2)
   {
     //Регулярное выражение, описывающее текст длиной 8
-    reg_exp_key.setPattern("^.{8}$");
+    reg_exp_key.setPattern("^[0-9a-zA-Z]{8}$");
 
     base_data = 0;
   }
