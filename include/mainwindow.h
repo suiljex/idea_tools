@@ -66,6 +66,8 @@ private slots:
 
   void on_comboBox_base_key_currentIndexChanged(int index);
 
+  void on_comboBox_base_crypt_currentIndexChanged(int index);
+
 private:
   Ui::MainWindow *ui;
 
@@ -73,6 +75,8 @@ private:
   About *form_about;
   Help* form_help;
 
+  QRegExp reg_exp_crypt;
+  unsigned int base_cryptotext;
   unsigned int base_key;
 
   bool key_applied;
