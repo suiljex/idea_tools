@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->comboBox_base_key->setCurrentIndex(1);
 
   ui->comboBox_base_crypt->addItem("base64");
-  ui->comboBox_base_crypt->addItem("hex");
+  ui->comboBox_base_crypt->addItem("hex(16)");
   ui->comboBox_base_crypt->setCurrentIndex(0);
 }
 
