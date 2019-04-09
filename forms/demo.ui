@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>986</width>
-    <height>1121</height>
+    <height>1141</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -149,7 +149,8 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Сгенерировать ключ</string>
+         <string>Сгенерировать
+ключ</string>
         </property>
        </widget>
       </item>
