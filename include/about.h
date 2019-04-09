@@ -15,6 +15,11 @@ public:
   explicit About(QWidget *parent = 0);
   ~About();
 
+private slots:
+  void on_pushButton_egg_pressed();
+
+  void on_pushButton_egg_released();
+
 private:
   Ui::About *ui;
 };
